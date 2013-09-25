@@ -14,6 +14,8 @@ class League(object):
         self.html_prev_week = None
         self.html_cur_week = None
         self.teams = []
+        self.results = []
+        self.schedule = []
 
 
 class Team(object):
