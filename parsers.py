@@ -15,9 +15,7 @@ def parse_standings(html):
     for row in rows:
         teams.append(extract_team_info_from_row(row))
 
-    sorted_teams = OrderedDict()
-    for x in sorted(teams, key=lambda team: team.rank):
-        sorted_teams[x.id] = x
+    sorted_teams = OrderedDict((team.id, team) for team in sorted(teams, key=lambda team: team.rank))
 
     return sorted_teams
 
