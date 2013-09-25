@@ -30,3 +30,11 @@ class Team(object):
         self.points_against = 0
         self.streak = None
         self.rank = 0
+
+
+class Game(object):
+    def __init__(self, team1, team2):
+        self.team1_id = int(team1[0])
+        self.team1_score = float(team1[1])
+        self.team2_id = int(team2[0])
+        self.team2_score = float(team2[1])

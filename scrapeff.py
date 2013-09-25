@@ -8,7 +8,7 @@ from mocks import week4
 import classes
 import parsers
 
-env = Environment(loader=FileSystemLoader('templates'), trim_blocks=True, lstrip_blocks=True)
+env = Environment(loader=FileSystemLoader('templates'), trim_blocks=True)
 
 league_info_list = [(120356, 'Dynasty'),
                     (92221, 'Keeper'),
@@ -45,6 +45,6 @@ for l in league_info_list:
     sorted_leagues.append(leagues[l[0]])
 #print jsonpickle.encode(sorted_leagues)
 
-template = env.get_template('standings.template')
+template = env.get_template('main.template')
 
 print template.render(sorted_leagues=sorted_leagues)

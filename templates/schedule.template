@@ -1,0 +1,12 @@
+<table>
+<tr><th colspan="4" style="text-align:center;"><span style="color:#009900">Schedule</span></th></tr>
+{% for game in league.schedule %}
+<tr>
+<td>{% for team in league.teams %}{% if team.id == game.team1_id %}{{ team.name }}{% endif %}{% endfor %}</td>
+<td>{{ game.team1_score }}</td>
+<td>{% for team in league.teams %}{% if team.id == game.team2_id %}{{ team.name }}{% endif %}{% endfor %}</td>
+<td>{{ game.team2_score }}</td>
+</tr>
+{% endfor %}
+<tr><th colspan="4" style="text-align:center;">&nbsp;</th></tr>
+</table>

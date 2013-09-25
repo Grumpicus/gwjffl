@@ -9,7 +9,7 @@ import constants
 def parse_standings(html):
     teams = []
     soup = BeautifulSoup(html)
-    rows = soup.find_all('tr', class_='cell-row')
+    rows = soup.find_all('tr', class_=constants.cell_row_class)
     for row in rows:
         teams.append(extract_team_info_from_row(row))
     teams.sort(key=lambda team: team.rank)
@@ -20,9 +20,9 @@ def extract_team_info_from_row(row):
     #print(row.prettify())
     team = classes.Team()
 
-    div_league_name = row.find('div', class_=constants.league_name_class).find('a')
-    team.name = div_league_name.text
-    team.url = '%s%s' % (constants.fleaflicker_url, div_league_name['href'])
+    a_team_info = row.find('div', class_=constants.league_name_class).find('a')
+    team.name = a_team_info.text
+    team.url = '%s%s' % (constants.fleaflicker_url, a_team_info['href'])
     start = team.url.find(constants.team_id_param) + len(constants.team_id_param)
     team.id = int(team.url[start:])
 
@@ -58,5 +58,27 @@ def parse_prev_week(html):
 
 def parse_cur_week(html):
     schedule = []
-    #soup = BeautifulSoup(html)
+    soup = BeautifulSoup(html)
+
+    schedule.append(get_game_info(1, soup))
+    schedule.append(get_game_info(2, soup))
+    schedule.append(get_game_info(3, soup))
+    schedule.append(get_game_info(4, soup))
+    schedule.append(get_game_info(5, soup))
+    schedule.append(get_game_info(6, soup))
+
     return schedule
+
+
+def get_game_info(game_number, soup):
+    team1_row = soup.find(id=constants.game_team_ids['game%s_team1_id' % game_number])
+    team2_row = soup.find(id=constants.game_team_ids['game%s_team2_id' % game_number])
+    return classes.Game(get_team_info(team1_row), get_team_info(team2_row))
+
+
+def get_team_info(row):
+    team_info = row.find('a')
+    start = team_info['href'].find(constants.team_id_param) + len(constants.team_id_param)
+    team_id = int(team_info['href'][start:])
+    team_projected = float(row.find('span', class_=constants.projected_class).text)
+    return (team_id, team_projected)

@@ -1,1 +1,13 @@
-[img]http://img707.imageshack.us/img707/8796/gwjfantasyfootballlogo.png[/img]
+<img src="http://img707.imageshack.us/img707/8796/gwjfantasyfootballlogo.png">
+<!--break-->
+{% for league in sorted_leagues %}
+<p><a href="http://www.fleaflicker.com/nfl/league?leagueId={{ league.id }}"><b>{{ league.name }}</b></a></p>
+{% include 'standings.template' %}
+
+{% include 'schedule.template' %}
+
+
+&nbsp;
+
+{% endfor %}
+FOOTER
