@@ -9,14 +9,17 @@ import constants
 
 
 def parse_standings(html):
-    teams = OrderedDict()
+    teams = []
     soup = BeautifulSoup(html)
     rows = soup.find_all('tr', class_=constants.cell_row_class)
     for row in rows:
-        team_info = extract_team_info_from_row(row)
-        teams[team_info.id] = team_info
-    teams = OrderedDict(sorted(teams.items(), key=lambda team: team[1].rank))
-    return teams
+        teams.append(extract_team_info_from_row(row))
+
+    sorted_teams = OrderedDict()
+    for x in sorted(teams, key=lambda team: team.rank):
+        sorted_teams[x.id] = x
+
+    return sorted_teams
 
 
 def extract_team_info_from_row(row):
