@@ -20,22 +20,22 @@ def extract_team_info_from_row(row):
     #print(row.prettify())
     team = classes.Team()
 
-    div_league_name = row.find('div', class_='league-name').find('a')
+    div_league_name = row.find('div', class_=constants.league_name_class).find('a')
     team.name = div_league_name.text
     team.url = '%s%s' % (constants.fleaflicker_url, div_league_name['href'])
-    start = team.url.find('teamId=') + len('teamId=')
+    start = team.url.find(constants.team_id_param) + len(constants.team_id_param)
     team.id = int(team.url[start:])
 
-    a_user_name = row.find('a', class_='user-name')
+    a_user_name = row.find('a', class_=constants.user_name_class)
     team.username = a_user_name.text
 
-    second_td_horizontal_spacer = row.find_all('td', class_='horizontal-spacer')[1]
+    second_td_horizontal_spacer = row.find_all('td', class_=constants.horizontal_spacer_class)[1]
     td_wins = second_td_horizontal_spacer.next_sibling
     team.wins = int(td_wins.text)
     td_losses = td_wins.next_sibling
     team.losses = int(td_losses.text)
 
-    third_td_horizontal_spacer = row.find_all('td', class_='horizontal-spacer')[2]
+    third_td_horizontal_spacer = row.find_all('td', class_=constants.horizontal_spacer_class)[2]
     td_streak = third_td_horizontal_spacer.previous_sibling
     team.streak = td_streak.text
     td_points_for = third_td_horizontal_spacer.next_sibling
@@ -43,7 +43,7 @@ def extract_team_info_from_row(row):
     td_points_against = td_points_for.next_sibling.next_sibling
     team.points_against = float(td_points_against.text)
 
-    fourth_td_horizontal_spacer = row.find_all('td', class_='horizontal-spacer')[3]
+    fourth_td_horizontal_spacer = row.find_all('td', class_=constants.horizontal_spacer_class)[3]
     td_rank = fourth_td_horizontal_spacer.next_sibling
     team.rank = int(td_rank.text)
 
