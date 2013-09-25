@@ -54,24 +54,9 @@ def extract_team_info_from_row(row):
     return team
 
 
-def parse_prev_week(html):
-    results = []
-    #soup = BeautifulSoup(html)
-    return results
-
-
-def parse_cur_week(html):
-    schedule = []
+def parse_scores(html):
     soup = BeautifulSoup(html)
-
-    schedule.append(get_game_info(1, soup))
-    schedule.append(get_game_info(2, soup))
-    schedule.append(get_game_info(3, soup))
-    schedule.append(get_game_info(4, soup))
-    schedule.append(get_game_info(5, soup))
-    schedule.append(get_game_info(6, soup))
-
-    return schedule
+    return [get_game_info(i, soup) for i in range(1, 6)]
 
 
 def get_game_info(game_number, soup):
@@ -83,6 +68,7 @@ def get_game_info(game_number, soup):
 def get_team_info(row):
     team_info = row.find('a')
     start = team_info['href'].find(constants.team_id_param) + len(constants.team_id_param)
-    team_id = int(team_info['href'][start:])
-    team_projected = float(row.find('span', class_=constants.projected_class).text)
-    return (team_id, team_projected)
+    end = team_info['href'].find('&', start)
+    team_id = int(team_info['href'][start:None if end == -1 else end])
+    score = float(row.find('td', class_='right').text)
+    return (team_id, score)

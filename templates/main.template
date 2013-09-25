@@ -4,6 +4,8 @@
 <p><a href="http://www.fleaflicker.com/nfl/league?leagueId={{ leagues[league_id].id }}"><h2>{{ leagues[league_id].name }}</h2></a></p>
 {% include 'standings.template' %}
 
+{% include 'results.template' %}
+
 {% include 'schedule.template' %}
 
 
