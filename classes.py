@@ -4,7 +4,7 @@ import constants
 
 
 class League(object):
-    def __init__(self, league_info, current_week):
+    def __init__(self, league_info, current_week, sort_index=0):
         self.id = league_info[0]
         self.name = league_info[1]
         self.url_standings = constants.standings_url % league_info[0]
@@ -13,9 +13,10 @@ class League(object):
         self.html_standings = None
         self.html_prev_week = None
         self.html_cur_week = None
-        self.teams = []
+        self.teams = None
         self.results = []
         self.schedule = []
+        self.sort_key = sort_index
 
 
 class Team(object):
@@ -38,3 +39,4 @@ class Game(object):
         self.team1_score = float(team1[1])
         self.team2_id = int(team2[0])
         self.team2_score = float(team2[1])
+        self.highest_rank = 0

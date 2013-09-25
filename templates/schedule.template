@@ -1,10 +1,12 @@
 <table>
 <tr><th colspan="3" style="text-align:center;"><span style="color:#009900">Schedule</span></th></tr>
-{% for game in league.schedule %}
+{% for game in leagues[league_id].schedule %}
 <tr>
-<td>{% for team in league.teams %}{% if team.id == game.team1_id %}#{{ team.rank }} {{ team.name }} ({{ team.wins}}-{{team.losses}}){% endif %}{% endfor %}</td>
+{% set team = leagues[league_id].teams[game.team1_id] %}
+<td>#{{ team.rank }} {{ team.name }} ({{ team.wins}}-{{team.losses}})</td>
 <td>vs.</td>
-<td>{% for team in league.teams %}{% if team.id == game.team2_id %}#{{ team.rank }} {{ team.name }} ({{ team.wins}}-{{team.losses}}){% endif %}{% endfor %}</td>
+{% set team = leagues[league_id].teams[game.team2_id] %}
+<td>#{{ team.rank }} {{ team.name }} ({{ team.wins}}-{{team.losses}})</td>
 </tr>
 {% endfor %}
 <tr><th colspan="3" style="text-align:center;">&nbsp;</th></tr>

@@ -7,22 +7,19 @@ from jinja2 import Environment, FileSystemLoader
 from mocks import week4
 import classes
 import parsers
+import constants
+from collections import OrderedDict
 
 env = Environment(loader=FileSystemLoader('templates'), trim_blocks=True)
 
-league_info_list = [(120356, 'Dynasty'),
-                    (92221, 'Keeper'),
-                    (131597, 'Pro'),
-                    (34260, 'Division I'),
-                    (33978, 'Division II')]
 current_week = 4
 
 
 def get_and_parse_league_data():
-    league_data = {}
+    league_data = OrderedDict()
 
-    for x in league_info_list:
-        league_data[x[0]] = classes.League(x, current_week)
+    for i, x in enumerate(constants.league_info_list):
+        league_data[x[0]] = classes.League(x, current_week, i)
         #leagues[x[0]].html_standings = urllib2.urlopen(leagues[x[0]].url_standings).read()
         #leagues[x[0]].html_prev_week = urllib2.urlopen(leagues[x[0]].url_prev_week).read()
         #leagues[x[0]].html_cur_week = urllib2.urlopen(leagues[x[0]].url_cur_week).read()
@@ -35,16 +32,17 @@ def get_and_parse_league_data():
         league_data[x].results = parsers.parse_prev_week(league_data[x].html_prev_week)
         league_data[x].schedule = parsers.parse_cur_week(league_data[x].html_cur_week)
 
+        for game in league_data[x].schedule:
+            game.highest_rank = min(league_data[x].teams[game.team1_id].rank, league_data[x].teams[game.team2_id].rank)
+
+        league_data[x].schedule.sort(key=lambda game: game.highest_rank)
+
     return league_data
 
 
 leagues = get_and_parse_league_data()
-sorted_leagues = []
-
-for l in league_info_list:
-    sorted_leagues.append(leagues[l[0]])
-#print jsonpickle.encode(sorted_leagues)
+#print jsonpickle.encode(leagues)
 
 template = env.get_template('main.template')
 
-print template.render(sorted_leagues=sorted_leagues)
+print template.render(leagues=leagues)

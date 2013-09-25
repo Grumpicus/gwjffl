@@ -1,5 +1,11 @@
 __author__ = 'Grumpicus'
 
+league_info_list = [(120356, 'Dynasty'),
+                    (92221, 'Keeper'),
+                    (131597, 'Pro'),
+                    (34260, 'Division I'),
+                    (33978, 'Division II')]
+
 fleaflicker_url = 'http://www.fleaflicker.com'
 standings_url = 'http://www.fleaflicker.com/nfl/league?leagueId=%s'
 scores_url = 'http://www.fleaflicker.com/nfl/league-schedule?leagueId=%s&week=%s'

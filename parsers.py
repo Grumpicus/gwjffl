@@ -1,3 +1,5 @@
+from collections import OrderedDict
+
 __author__ = 'Grumpicus'
 
 from bs4 import BeautifulSoup
@@ -7,12 +9,13 @@ import constants
 
 
 def parse_standings(html):
-    teams = []
+    teams = OrderedDict()
     soup = BeautifulSoup(html)
     rows = soup.find_all('tr', class_=constants.cell_row_class)
     for row in rows:
-        teams.append(extract_team_info_from_row(row))
-    teams.sort(key=lambda team: team.rank)
+        team_info = extract_team_info_from_row(row)
+        teams[team_info.id] = team_info
+    teams = OrderedDict(sorted(teams.items(), key=lambda team: team[1].rank))
     return teams
 
 
