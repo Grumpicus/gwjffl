@@ -56,7 +56,7 @@ def extract_team_info_from_row(row):
 
 def parse_scores(html):
     soup = BeautifulSoup(html)
-    return [get_game_info(i, soup) for i in range(1, 6)]
+    return [get_game_info(i, soup) for i in range(1, 7)]
 
 
 def get_game_info(game_number, soup):

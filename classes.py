@@ -7,6 +7,7 @@ class League(object):
     def __init__(self, league_info, current_week, sort_index=0):
         self.id = league_info[0]
         self.name = league_info[1]
+        self.week = current_week
         self.url_standings = constants.standings_url % league_info[0]
         self.url_prev_week = constants.scores_url % (league_info[0], current_week - 1)
         self.url_cur_week = constants.scores_url % (league_info[0], current_week)

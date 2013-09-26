@@ -1,13 +1,18 @@
 <table>
-<tr><th colspan="3" style="text-align:center;"><span style="color:#009900">Schedule</span></th></tr>
+<tr><th colspan="3" style="text-align:center;"><span style="color:#009900">Schedule - Week {{ leagues[league_id].week }}</span></th></tr>
 {% for game in leagues[league_id].schedule %}
+{% set team1 = leagues[league_id].teams[game.team1_id] %}
+{% set team2 = leagues[league_id].teams[game.team2_id] %}
 <tr>
-{% set team = leagues[league_id].teams[game.team1_id] %}
-<td>#{{ team.rank }} {{ team.name }} ({{ team.wins}}-{{team.losses}})</td>
+{% if team1.rank < team2.rank %}
+<td>#{{ team1.rank }} {{ team1.name }} ({{ team1.wins}}-{{team1.losses}})</td>
 <td>vs.</td>
-{% set team = leagues[league_id].teams[game.team2_id] %}
-<td>#{{ team.rank }} {{ team.name }} ({{ team.wins}}-{{team.losses}})</td>
+<td>#{{ team2.rank }} {{ team2.name }} ({{ team2.wins}}-{{team2.losses}})</td>
+{% else %}
+<td>#{{ team2.rank }} {{ team2.name }} ({{ team2.wins}}-{{team2.losses}})</td>
+<td>vs.</td>
+<td>#{{ team1.rank }} {{ team1.name }} ({{ team1.wins}}-{{team1.losses}})</td>
+{% endif %}
 </tr>
 {% endfor %}
-<tr><th colspan="3" style="text-align:center;">&nbsp;</th></tr>
 </table>

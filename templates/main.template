@@ -1,14 +1,13 @@
 <img src="http://img707.imageshack.us/img707/8796/gwjfantasyfootballlogo.png">
 <!--break-->
 {% for league_id in leagues %}
-<p><a href="http://www.fleaflicker.com/nfl/league?leagueId={{ leagues[league_id].id }}"><h2>{{ leagues[league_id].name }}</h2></a></p>
-{% include 'standings.template' %}
-
+<fieldset>
+<legend style="font-weight: bold; font-size: 2em; padding: 0 10px;"><a href="http://www.fleaflicker.com/nfl/league?leagueId={{ leagues[league_id].id }}">{{ leagues[league_id].name }}</a></legend>
 {% include 'results.template' %}
-
+{% include 'standings.template' %}
 {% include 'schedule.template' %}
 
-
-&nbsp;
+</fieldset>
+<p>&nbsp;</p>
 
 {% endfor %}
