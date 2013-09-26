@@ -6,7 +6,7 @@
 <tr>
 {% if team1.rank < team2.rank %}
 <td style="text-align:right;">{% if game.team1_score > game.team2_score %}<b>{% endif%}{{ '%.2f' % game.team1_score }}{% if game.team1_score > game.team2_score %}</b>{% endif%}</td>
-<td>{% if game.team1_score > game.team2_score %}<b>{% endif%} #{{ team1.rank }} {{ team1.name }} ({{ team1.wins}}-{{team1.losses}}){% if game.team1_score > game.team2_score %}</b>{% endif%}</td>
+<td>{% if game.team1_score > game.team2_score %}<b>{% endif%}#{{ team1.rank }} {{ team1.name }} ({{ team1.wins}}-{{team1.losses}}){% if game.team1_score > game.team2_score %}</b>{% endif%}</td>
 <td>vs.</td>
 <td>{% if game.team2_score > game.team1_score %}<b>{% endif%}#{{ team2.rank }} {{ team2.name }} ({{ team2.wins}}-{{team2.losses}}){% if game.team2_score > game.team1_score %}</b>{% endif%}</td>
 <td style="text-align:right;">{% if game.team2_score > game.team1_score %}<b>{% endif%}{{ '%.2f' % game.team2_score }}{% if game.team2_score > game.team1_score %}</b>{% endif%}</td>
@@ -14,7 +14,7 @@
 <td style="text-align:right;">{% if game.team2_score > game.team1_score %}<b>{% endif%}{{ '%.2f' % game.team2_score }}{% if game.team2_score > game.team1_score %}</b>{% endif%}</td>
 <td>{% if game.team2_score > game.team1_score %}<b>{% endif%}#{{ team2.rank }} {{ team2.name }} ({{ team2.wins}}-{{team2.losses}}){% if game.team2_score > game.team1_score %}</b>{% endif%}</td>
 <td>vs.</td>
-<td>{% if game.team1_score > game.team2_score %}<b>{% endif%} #{{ team1.rank }} {{ team1.name }} ({{ team1.wins}}-{{team1.losses}}){% if game.team1_score > game.team2_score %}</b>{% endif%}</td>
+<td>{% if game.team1_score > game.team2_score %}<b>{% endif%}#{{ team1.rank }} {{ team1.name }} ({{ team1.wins}}-{{team1.losses}}){% if game.team1_score > game.team2_score %}</b>{% endif%}</td>
 <td style="text-align:right;">{% if game.team1_score > game.team2_score %}<b>{% endif%}{{ '%.2f' % game.team1_score }}{% if game.team1_score > game.team2_score %}</b>{% endif%}</td>
 {% endif %}
 </tr>

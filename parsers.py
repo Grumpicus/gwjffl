@@ -24,7 +24,9 @@ def extract_team_info_from_row(row):
     #print(row.prettify())
     team = classes.Team()
 
-    a_team_info = row.find('div', class_=constants.league_name_class).find('a')
+    div_league_name = row.find('div', class_=constants.league_name_class)
+    team.icon = '' if div_league_name.find('img') == None else '<img src="%s">' % div_league_name.find('img')['src']
+    a_team_info = div_league_name.find('a')
     team.name = a_team_info.text
     team.url = '%s%s' % (constants.fleaflicker_url, a_team_info['href'])
     start = team.url.find(constants.team_id_param) + len(constants.team_id_param)
