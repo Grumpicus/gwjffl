@@ -1,18 +1,26 @@
 __author__ = 'Grumpicus'
 
-from jinja2 import Environment, FileSystemLoader
-#import urllib2
-#import jsonpickle
+from collections import OrderedDict
+import urllib2
+import string
 
-from mocks import week4
+from jinja2 import Environment, FileSystemLoader
+from ediblepickle import checkpoint
+
 import classes
 import parsers
 import constants
-from collections import OrderedDict
+
 
 env = Environment(loader=FileSystemLoader('templates'), trim_blocks=True)
 
 current_week = 4
+
+
+@checkpoint(key=string.Template('{1}_week{3}_{2}.html'), work_dir='pickles')
+def get_html(url, league_name, url_type, week):
+    html = urllib2.urlopen(url).read()
+    return html
 
 
 def get_and_parse_league_data():
@@ -21,14 +29,17 @@ def get_and_parse_league_data():
     #get data
     for i, x in enumerate(constants.league_info_list):
         league_data[x[0]] = classes.League(x, current_week, i)
-        #leagues[x[0]].html_standings = urllib2.urlopen(leagues[x[0]].url_standings).read()
-        #leagues[x[0]].html_cur_week = urllib2.urlopen(leagues[x[0]].url_cur_week).read()
-        #leagues[x[0]].html_prev_week = urllib2.urlopen(leagues[x[0]].url_prev_week).read()
-        league_data[x[0]].html_standings = week4.standings_mock[x[0]]
-        league_data[x[0]].html_cur_week = week4.cur_week_mock[x[0]]
-        league_data[x[0]].html_prev_week = week4.prev_week_mock[x[0]]
+        league_data[x[0]].html_standings = get_html(league_data[x[0]].url_standings,
+                                                    league_data[x[0]].name.replace(' ', ''), constants.standings,
+                                                    current_week)
+        league_data[x[0]].html_cur_week = get_html(league_data[x[0]].url_cur_week,
+                                                   league_data[x[0]].name.replace(' ', ''), constants.cur_week,
+                                                   current_week)
+        league_data[x[0]].html_prev_week = get_html(league_data[x[0]].url_prev_week,
+                                                    league_data[x[0]].name.replace(' ', ''), constants.prev_week,
+                                                    current_week)
 
-    #parsedata
+    #parse data
     for x in league_data:
         league_data[x].teams = parsers.parse_standings(league_data[x].html_standings)
 
@@ -46,8 +57,9 @@ def get_and_parse_league_data():
 
 
 leagues = get_and_parse_league_data()
-#print jsonpickle.encode(leagues)
 
 template = env.get_template('main.template')
-
-print template.render(leagues=leagues)
+output = template.render(leagues=leagues)
+print output
+f1 = open('output/output.html', 'w+')
+f1.write(output)

@@ -3,16 +3,10 @@
 {% for game in leagues[league_id].schedule %}
 {% set team1 = leagues[league_id].teams[game.team1_id] %}
 {% set team2 = leagues[league_id].teams[game.team2_id] %}
-<tr>
 {% if team1.rank < team2.rank %}
-<td>#{{ team1.rank }} {{ team1.name }} ({{ team1.wins}}-{{team1.losses}})</td>
-<td>vs.</td>
-<td>#{{ team2.rank }} {{ team2.name }} ({{ team2.wins}}-{{team2.losses}})</td>
+<tr><td>#{{ team1.rank }} {{ team1.name }} ({{ team1.wins}}-{{team1.losses}})</td><td>vs.</td><td>#{{ team2.rank }} {{ team2.name }} ({{ team2.wins}}-{{team2.losses}})</td></tr>
 {% else %}
-<td>#{{ team2.rank }} {{ team2.name }} ({{ team2.wins}}-{{team2.losses}})</td>
-<td>vs.</td>
-<td>#{{ team1.rank }} {{ team1.name }} ({{ team1.wins}}-{{team1.losses}})</td>
+<tr><td>#{{ team2.rank }} {{ team2.name }} ({{ team2.wins}}-{{team2.losses}})</td><td>vs.</td><td>#{{ team1.rank }} {{ team1.name }} ({{ team1.wins}}-{{team1.losses}})</td></tr>
 {% endif %}
-</tr>
 {% endfor %}
 </table>

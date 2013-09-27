@@ -4,7 +4,9 @@
 <fieldset>
 <legend style="font-weight: bold; font-size: 1.5em; padding: 0 10px;"><a href="http://www.fleaflicker.com/nfl/league?leagueId={{ leagues[league_id].id }}">{{ leagues[league_id].name }}</a></legend>
 {% include 'standings.template' %}
+
 {% include 'results.template' %}
+
 {% include 'schedule.template' %}
 </fieldset>
 <p>&nbsp;</p>
