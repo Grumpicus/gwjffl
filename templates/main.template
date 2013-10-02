@@ -8,6 +8,7 @@
 {% include 'results.template' %}
 
 {% include 'schedule.template' %}
+
 </fieldset>
 <p>&nbsp;</p>
 

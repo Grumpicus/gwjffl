@@ -14,7 +14,7 @@ import constants
 
 env = Environment(loader=FileSystemLoader('templates'), trim_blocks=True)
 
-current_week = 4
+current_week = 5
 
 
 @checkpoint(key=string.Template('{1}_week{3}_{2}.html'), work_dir='pickles')
@@ -58,8 +58,12 @@ def get_and_parse_league_data():
 
 leagues = get_and_parse_league_data()
 
-template = env.get_template('main.template')
-output = template.render(leagues=leagues)
-print output
-f1 = open('output/output.html', 'w+')
-f1.write(output)
+start_week_template = env.get_template('main.template')
+start_week_output = start_week_template.render(leagues=leagues)
+f1 = open('output/start_week%s.html' % current_week, 'w+')
+f1.write(start_week_output)
+
+end_week_template = env.get_template('scores.template')
+end_week_output = end_week_template.render(leagues=leagues)
+f1 = open('output/end_week%s.html' % current_week, 'w+')
+f1.write(end_week_output)

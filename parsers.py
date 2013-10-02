@@ -21,8 +21,11 @@ def parse_standings(html):
 
 
 def extract_team_info_from_row(row):
-    #print(row.prettify())
+    #print(row)
     team = classes.Team()
+
+    td_div_rank = row.contents[0]
+    team.div_rank = int(td_div_rank.text)
 
     div_league_name = row.find('div', class_=constants.league_name_class)
     team.icon = '' if div_league_name.find('img') == None else '<img src="%s">' % div_league_name.find('img')['src']
@@ -40,6 +43,8 @@ def extract_team_info_from_row(row):
     team.wins = int(td_wins.text)
     td_losses = td_wins.next_sibling
     team.losses = int(td_losses.text)
+    td_div_record = td_losses.next_sibling.next_sibling.next_sibling
+    team.div_record = td_div_record.text
 
     third_td_horizontal_spacer = row.find_all('td', class_=constants.horizontal_spacer_class)[2]
     td_streak = third_td_horizontal_spacer.previous_sibling

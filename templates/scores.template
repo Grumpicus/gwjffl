@@ -1,5 +1,6 @@
+{% for league_id in leagues %}
 <table>
-<tr><th colspan="5" style="text-align:center;"><span style="color:#009900">Results - Week {{ leagues[league_id].week-1 }}</span></th></tr>
+<tr><th colspan="5" style="text-align:center;"><a href="http://www.fleaflicker.com/nfl/league?leagueId={{ leagues[league_id].id }}">{{ leagues[league_id].name }}</a></th></tr>
 {% for game in leagues[league_id].results %}
 {% set team1 = leagues[league_id].teams[game.team1_id] %}
 {% set team2 = leagues[league_id].teams[game.team2_id] %}
@@ -20,3 +21,7 @@
 </tr>
 {% endfor %}
 </table>
+
+<p>&nbsp;</p>
+
+{% endfor %}

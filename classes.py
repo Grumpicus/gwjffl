@@ -18,6 +18,8 @@ class League(object):
         self.results = []
         self.schedule = []
         self.sort_key = sort_index
+        self.div_record = ''
+        self.div_rank = 0
 
 
 class Team(object):
