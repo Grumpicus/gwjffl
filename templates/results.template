@@ -1,5 +1,5 @@
 <table>
-<tr><th colspan="5" style="text-align:center;"><span style="color:#009900">Results - Week {{ leagues[league_id].week-1 }}</span></th></tr>
+<tr><th colspan="5" style="text-align:center;"><span style="color:#009900;">Results - Week {{ current_week-1 }}</span></th></tr>
 {% for game in leagues[league_id].results %}
 {% set team1 = leagues[league_id].teams[game.team1_id] %}
 {% set team2 = leagues[league_id].teams[game.team2_id] %}

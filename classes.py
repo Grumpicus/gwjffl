@@ -1,23 +1,16 @@
 __author__ = 'Grumpicus'
 
-import constants
-
 
 class League(object):
-    def __init__(self, league_info, current_week, sort_index=0):
-        self.id = league_info[0]
-        self.name = league_info[1]
-        self.week = current_week
-        self.url_standings = constants.standings_url % league_info[0]
-        self.url_prev_week = constants.scores_url % (league_info[0], current_week - 1)
-        self.url_cur_week = constants.scores_url % (league_info[0], current_week)
+    def __init__(self, league_id, league_name):
+        self.id = league_id
+        self.name = league_name
         self.html_standings = ''
         self.html_prev_week = ''
         self.html_cur_week = ''
         self.teams = None
         self.results = []
         self.schedule = []
-        self.sort_key = sort_index
         self.div_record = ''
         self.div_rank = 0
 

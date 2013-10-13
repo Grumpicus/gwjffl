@@ -1,8 +1,8 @@
 <table>
-<tr><th colspan="6" style="text-align:center;"><span style="color:#009900">Standings</span></th></tr>
+<tr><th colspan="6" style="text-align:center;"><span style="color:#009900;">Standings - Week {{ current_week }}</span></th></tr>
 <tr><th>&nbsp;</th><th>&nbsp;</th><th>&nbsp;</th><th>Overall</th><th>Division</th><th>Points For</th></tr>
 {% for team_id in leagues[league_id].teams %}
 {% set team = leagues[league_id].teams[team_id] %}
-<tr><td style="width:60px; text-align:right;">#{{ team.rank }} ({% if team.div_rank == 1 %}<b>{% endif %}{{ team.div_rank }}{% if team.div_rank == 1 %}</b>{% endif %})</td><td style="width:16px; text-align:center;">{{ team.icon }}</td><td><a href="{{ team.url }}">{{ team.name }}</a> ({{ team.username }})</td><td>{{ team.wins }}-{{ team.losses }}</td><td>{{ team.div_record }}</td><td>{{ '%.2f' % team.points_for }}</td></tr>
+<tr><td style="width:60px; text-align:right;">#{{ team.rank }}</td><td style="width:16px; text-align:center;">{{ team.icon }}</td><td><a href="{{ team.url }}">{{ team.name }}</a> ({{ team.username }})</td><td>{{ team.wins }}-{{ team.losses }}</td><td>{{ team.div_record }} ({% if team.div_rank == 1 %}<b>{% endif %}{{ team.div_rank }}{% if team.div_rank == 1 %}</b>{% endif %})</td><td>{{ '%.2f' % team.points_for }}</td></tr>
 {% endfor %}
 </table>
