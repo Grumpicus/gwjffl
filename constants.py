@@ -19,15 +19,15 @@ main_template = 'main.template'
 scores_template = 'scores.template'
 
 #output
-start_week_filepath = 'output/start_week%s.html'
-end_week_filepath = 'output/end_week%s.html'
+start_week_file_path = 'output/start_week%s.html'
+end_week_file_path = 'output/end_week%s.html'
 
 standings_label = 'standings'
 schedule_label = 'schedule'
 results_label = 'results'
 
-#datastore
-json_storage_path = 'datastore/data.json'
+#data_store
+json_storage_path = 'data_store/data.json'
 
 #fleaflicker
 fleaflicker_url = 'http://www.fleaflicker.com'

@@ -3,14 +3,14 @@
 <!--<tr style="color:#CCC;"><td style="text-align:right;">1st place</td><td style="text-align:right;">$102.00</td><td>TBD</td></tr>-->
 <!--<tr style="color:#CCC;"><td style="text-align:right;">2nd place</td><td style="text-align:right;">$51.00</td><td>TBD</td></tr>-->
 <!--<tr style="color:#CCC;"><td style="text-align:right;">3rd place</td><td style="text-align:right;">$25.50</td><td>TBD</td></tr>-->
-<tr><td style="text-align:right;">Regular season most points</td><td style="text-align:right;">$25.50</td><td>{{ pro_data.regmost }}</td></tr>
-<tr><td style="text-align:right;">#1 Overall</td><td style="text-align:right;">$10.20</td><td>{{ pro_data.numone }}</td></tr>
+<tr><td style="text-align:right;">Regular season most points</td><td style="text-align:right;">$25.50</td><td>{{ pro_data.regular_season_most_points }}</td></tr>
+<tr><td style="text-align:right;">#1 Overall</td><td style="text-align:right;">$10.20</td><td>{{ pro_data.number_one }}</td></tr>
 <tr><td style="text-align:right;">Division Winner</td><td style="text-align:right;">$15.30</td><td>{{ pro_data.div1 }}</td></tr>
 <tr><td style="text-align:right;">Division Winner</td><td style="text-align:right;">$15.30</td><td>{{ pro_data.div2 }}</td></tr>
 <tr><td style="text-align:right;">Division Winner</td><td style="text-align:right;">$15.30</td><td>{{ pro_data.div3 }}</td></tr>
 <tr><td style="text-align:right;">Division Winner</td><td style="text-align:right;">$15.30</td><td>{{ pro_data.div4 }}</td></tr>
 <!--<tr style="color:#CCC;"><td style="text-align:right;">Consolation champ</td><td style="text-align:right;">$15.30</td><td>TBD</td></tr>-->
-<tr><td style="text-align:right;">Highest single-week team total - regular season</td><td style="text-align:right;">$10.20</td><td>{{ pro_data.regsingle.team }} ({{ pro_data.regsingle.points }} in week {{ pro_data.regsingle.week }})</td></tr>
+<tr><td style="text-align:right;">Highest single-week team total - regular season</td><td style="text-align:right;">$10.20</td><td>{{ pro_data.regular_season_highest_score.team }} ({{ pro_data.regular_season_highest_score.points }} in week {{ pro_data.regular_season_highest_score.week }})</td></tr>
 <!--<tr style="color:#CCC;"><td style="text-align:right;">Highest single-week team total - post season</td><td style="text-align:right;">$5.10</td><td>TBD</td></tr>-->
 </table>
 

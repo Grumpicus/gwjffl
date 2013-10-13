@@ -28,7 +28,7 @@ def extract_team_info_from_row(row):
     team.div_rank = int(td_div_rank.text)
 
     div_league_name = row.find('div', class_=constants.league_name_class)
-    team.icon = '' if div_league_name.find('img') == None else '<img src="%s">' % div_league_name.find('img')['src']
+    team.icon = '' if div_league_name.find('img') is None else '<img src="%s">' % div_league_name.find('img')['src']
     a_team_info = div_league_name.find('a')
     team.name = a_team_info.text
     team.url = '%s%s' % (constants.fleaflicker_url, a_team_info['href'])
@@ -78,4 +78,4 @@ def get_team_info(row):
     end = team_info['href'].find('&', start)
     team_id = int(team_info['href'][start:None if end == -1 else end])
     score = float(row.find('td', class_='right').text)
-    return (team_id, score)
+    return team_id, score

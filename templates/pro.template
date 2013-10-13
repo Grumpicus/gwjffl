@@ -1,12 +1,12 @@
 <table>
 <tr><th colspan="2" style="text-align:center;"><span style="color:#009900;">Awards</span></th></tr>
-<tr><td style="text-align:right; width:50%;">Regular season most points ($25)</td><td>{{ pro_data.regmost.team }} ({{ '%.2f' % pro_data.regmost.points }})</td></tr>
-<tr><td style="text-align:right; width:50%;">#1 Overall ($10)</td><td>{{ pro_data.numone }}</td></tr>
+<tr><td style="text-align:right; width:50%;">Regular season most points ($25)</td><td>{{ pro_data.regular_season_most_points.team }} ({{ '%.2f' % pro_data.regular_season_most_points.points }})</td></tr>
+<tr><td style="text-align:right; width:50%;">#1 Overall ($10)</td><td>{{ pro_data.number_one }}</td></tr>
 <tr><td style="text-align:right; width:50%;">Division Winner ($15)</td><td>{{ pro_data.div1 }}</td></tr>
 <tr><td style="text-align:right; width:50%;">Division Winner ($15)</td><td>{{ pro_data.div2 }}</td></tr>
 <tr><td style="text-align:right; width:50%;">Division Winner ($15)</td><td>{{ pro_data.div3 }}</td></tr>
 <tr><td style="text-align:right; width:50%;">Division Winner ($15)</td><td>{{ pro_data.div4 }}</td></tr>
-<tr><td style="text-align:right; width:50%;">Highest single-week team total - regular season ($10)</td><td>{{ pro_data.regsingle.team }} ({{ '%.2f' % pro_data.regsingle.points }} in week {{ pro_data.regsingle.week }}){% if pro_data.regsingle.week == current_week %} <span style="color:#d33a1c; font-weight:bold;">new!</span>{% endif %}</td></tr>
+<tr><td style="text-align:right; width:50%;">Highest single-week team total - regular season ($10)</td><td>{{ pro_data.regular_season_highest_score.team }} ({{ '%.2f' % pro_data.regular_season_highest_score.points }} in week {{ pro_data.regular_season_highest_score.week }}){% if pro_data.regular_season_highest_score.week == current_week %} <span style="color:#d33a1c; font-weight:bold;">new!</span>{% endif %}</td></tr>
 </table>
 
 
