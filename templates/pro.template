@@ -8,18 +8,3 @@
 <tr><td style="text-align:right; width:50%;">Division Winner ($15)</td><td>{{ pro_data.div4 }}</td></tr>
 <tr><td style="text-align:right; width:50%;">Highest single-week team total - regular season ($10)</td><td>{{ pro_data.regular_season_highest_score.team }} ({{ '%.2f' % pro_data.regular_season_highest_score.points }} in week {{ pro_data.regular_season_highest_score.week }}){% if pro_data.regular_season_highest_score.week == current_week %} <span style="color:#d33a1c; font-weight:bold;">new!</span>{% endif %}</td></tr>
 </table>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
