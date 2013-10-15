@@ -1,3 +1,5 @@
+#python_version: 3.3.2
+
 from urllib.request import urlopen
 
 from collections import OrderedDict
@@ -65,12 +67,17 @@ def write_output(leagues_data, week, pro_data):
     f1.write(end_week_output)
 
 
-leagues = OrderedDict()
-for x in constants.league_definitions:
-    leagues[x[0]] = classes.League(x[0], x[1])
-    leagues[x[0]] = get_league_html(leagues[x[0]], constants.current_week)
-    leagues[x[0]] = parse_league_html(leagues[x[0]])
+def main():
+    leagues = OrderedDict()
+    for x in constants.league_definitions:
+        leagues[x[0]] = classes.League(x[0], x[1])
+        leagues[x[0]] = get_league_html(leagues[x[0]], constants.current_week)
+        leagues[x[0]] = parse_league_html(leagues[x[0]])
 
-pro_league_data = pro_parsers.extract_pro_data(leagues[constants.pro_league_id], constants.current_week)
+    pro_league_data = pro_parsers.extract_pro_data(leagues[constants.pro_league_id], constants.current_week)
 
-write_output(leagues, constants.current_week, pro_league_data)
+    write_output(leagues, constants.current_week, pro_league_data)
+
+
+if __name__ == "__main__":
+    main()
