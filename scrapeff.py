@@ -59,20 +59,18 @@ def write_output(leagues_data, week, pro_data):
     f1 = open(constants.start_week_file_path % week, 'w+')
     f1.write(start_week_output)
 
-    end_week_template = env.get_template(constants.scores_template)
+    end_week_template = env.get_template(constants.week_end_scores_template)
     end_week_output = end_week_template.render(leagues=leagues_data)
     f1 = open(constants.end_week_file_path % (week - 1), 'w+')
     f1.write(end_week_output)
 
 
-current_week = 6
-
 leagues = OrderedDict()
 for x in constants.league_definitions:
     leagues[x[0]] = classes.League(x[0], x[1])
-    leagues[x[0]] = get_league_html(leagues[x[0]], current_week)
+    leagues[x[0]] = get_league_html(leagues[x[0]], constants.current_week)
     leagues[x[0]] = parse_league_html(leagues[x[0]])
 
-pro_league_data = pro_parsers.extract_pro_data(leagues[constants.pro_league_id], current_week)
+pro_league_data = pro_parsers.extract_pro_data(leagues[constants.pro_league_id], constants.current_week)
 
-write_output(leagues, current_week, pro_league_data)
+write_output(leagues, constants.current_week, pro_league_data)

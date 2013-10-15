@@ -1,0 +1,4 @@
+<table>
+<tr><th colspan="5" style="text-align:center;"><span style="color:#009900;">Results - Week {{ current_week-1 }}</span></th></tr>
+{% include 'scores.template' %}
+</table>

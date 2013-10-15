@@ -9,7 +9,7 @@
 {% include 'pro.template' %}
 {% endif %}
 
-{% include 'results.template' %}
+{% include 'week_start_scores.template' %}
 
 {% include 'schedule.template' %}
 

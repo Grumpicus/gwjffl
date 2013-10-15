@@ -1,0 +1,9 @@
+{% for league_id in leagues %}
+<table>
+<tr><th colspan="5" style="text-align:center;"><a href="http://www.fleaflicker.com/nfl/league?leagueId={{ leagues[league_id].id }}">{{ leagues[league_id].name }}</a></th></tr>
+{% include 'scores.template' %}
+</table>
+
+<p>&nbsp;</p>
+
+{% endfor %}

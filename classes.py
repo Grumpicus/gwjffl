@@ -28,9 +28,10 @@ class Team(object):
 
 
 class Game(object):
-    def __init__(self, team1, team2):
+    def __init__(self, team1, team2, link):
         self.team1_id = int(team1[0])
         self.team1_score = float(team1[1])
         self.team2_id = int(team2[0])
         self.team2_score = float(team2[1])
         self.highest_rank = 0
+        self.box_link = link

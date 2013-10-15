@@ -65,9 +65,10 @@ def parse_scores(html):
 
 
 def get_game_info(game_number, soup):
-    team1_row = soup.find(id=constants.game_team_ids['game%s_team1_id' % game_number])
-    team2_row = soup.find(id=constants.game_team_ids['game%s_team2_id' % game_number])
-    return classes.Game(get_team_info(team1_row), get_team_info(team2_row))
+    team1_row = soup.find(id=constants.scoreboard_ids['game%d_team1_id' % game_number])
+    team2_row = soup.find(id=constants.scoreboard_ids['game%d_team2_id' % game_number])
+    game_link_row = soup.find(id=constants.scoreboard_ids['game%d_box_link_id' % game_number])
+    return classes.Game(get_team_info(team1_row), get_team_info(team2_row), get_game_link(game_link_row))
 
 
 def get_team_info(row):
@@ -77,3 +78,7 @@ def get_team_info(row):
     team_id = int(team_info['href'][start:None if end == -1 else end])
     score = float(row.find('td', class_='right').text)
     return team_id, score
+
+
+def get_game_link(row):
+    return '%s%s' % (constants.fleaflicker_url, row.find('a')['href'])
