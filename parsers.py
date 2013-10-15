@@ -1,7 +1,5 @@
 from collections import OrderedDict
 
-__author__ = 'Grumpicus'
-
 from bs4 import BeautifulSoup
 
 import classes

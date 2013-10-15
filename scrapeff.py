@@ -1,7 +1,6 @@
-__author__ = 'Grumpicus'
+from urllib.request import urlopen
 
 from collections import OrderedDict
-import urllib2
 import string
 
 from jinja2 import Environment, FileSystemLoader
@@ -16,7 +15,7 @@ import pro_parsers
 #noinspection PyUnusedLocal
 @checkpoint(key=string.Template(constants.edible_pickle_template), work_dir=constants.edible_pickle_dir)
 def get_html(url, url_type, week, league_label):
-    html = urllib2.urlopen(url).read()
+    html = urlopen(url).read()
     return html
 
 

@@ -1,8 +1,6 @@
 import json
 import constants
 
-__author__ = 'Grumpicus'
-
 
 def extract_pro_data(pro_league, current_week):
     pro_data = read_json_from_file(constants.json_storage_path)

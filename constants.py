@@ -1,5 +1,3 @@
-__author__ = 'Grumpicus'
-
 #leagues
 league_definitions = [(120356, 'Dynasty'),
                       (92221, 'Keeper'),
@@ -19,8 +17,8 @@ main_template = 'main.template'
 scores_template = 'scores.template'
 
 #output
-start_week_file_path = 'output/start_week%s.html'
-end_week_file_path = 'output/end_week%s.html'
+start_week_file_path = 'output/start_week%d.html'
+end_week_file_path = 'output/end_week%d.html'
 
 standings_label = 'standings'
 schedule_label = 'schedule'

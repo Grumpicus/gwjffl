@@ -1,6 +1,3 @@
-__author__ = 'Grumpicus'
-
-
 class League(object):
     def __init__(self, league_id, league_name):
         self.id = league_id
