@@ -9,10 +9,6 @@ league_definitions = [(131597, 'Pro'),
 
 pro_league_id = 131597
 
-standings = 'standings'
-cur_week = 'cur_week'
-prev_week = 'prev_week'
-
 #edible_pickle
 edible_pickle_dir = 'pickles'
 edible_pickle_template = 'week{2}_{1}_{3}.html'
@@ -26,9 +22,12 @@ week_end_scores_template = 'week_end_scores.template'
 start_week_file_path = 'output/start_week%d.html'
 end_week_file_path = 'output/end_week%d.html'
 
+#misc
 standings_label = 'standings'
 schedule_label = 'schedule'
 results_label = 'results'
+cur_week_label = 'cur_week'
+prev_week_label = 'prev_week'
 
 #data_store
 pro_data_storage_path = 'data_store/data.json'
