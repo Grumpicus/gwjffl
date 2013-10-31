@@ -4,6 +4,7 @@ from bs4 import BeautifulSoup
 
 import classes
 import constants
+from jsonstore import read_json_from_file, write_json_to_file
 
 
 def parse_standings(html):
@@ -48,9 +49,9 @@ def extract_team_info_from_row(row):
     td_streak = third_td_horizontal_spacer.previous_sibling
     team.streak = td_streak.text
     td_points_for = third_td_horizontal_spacer.next_sibling
-    team.points_for = float(td_points_for.text)
+    team.points_for = float(td_points_for.text.replace(',', ''))
     td_points_against = td_points_for.next_sibling.next_sibling
-    team.points_against = float(td_points_against.text)
+    team.points_against = float(td_points_against.text.replace(',', ''))
 
     fourth_td_horizontal_spacer = row.find_all('td', class_=constants.horizontal_spacer_class)[3]
     td_rank = fourth_td_horizontal_spacer.next_sibling
@@ -82,3 +83,33 @@ def get_team_info(row):
 
 def get_game_link(row):
     return '%s%s' % (constants.fleaflicker_url, row.find('a')['href'])
+
+
+def extract_pro_data(pro_league, current_week):
+    pro_data = read_json_from_file(constants.pro_data_storage_path)
+    i = 0
+    max_pf = 0
+    for x in pro_league.teams:
+        if pro_league.teams[x].div_rank == 1:
+            i += 1
+            ref = 'div%s' % i
+            pro_data[ref] = pro_league.teams[x].name
+        if pro_league.teams[x].rank == 1:
+            pro_data['number_one'] = pro_league.teams[x].name
+        if pro_league.teams[x].points_for > max_pf:
+            max_pf = pro_league.teams[x].points_for
+            pro_data['regular_season_most_points']['team'] = pro_league.teams[x].name
+            pro_data['regular_season_most_points']['points'] = pro_league.teams[x].points_for
+
+    for x in pro_league.results:
+        if x.team1_score > pro_data['regular_season_highest_score']['points']:
+            pro_data['regular_season_highest_score']['points'] = x.team1_score
+            pro_data['regular_season_highest_score']['team'] = pro_league.teams[x.team1_id]
+            pro_data['regular_season_highest_score']['week'] = current_week
+        if x.team2_score > pro_data['regular_season_highest_score']['points']:
+            pro_data['regular_season_highest_score']['points'] = x.team2_score
+            pro_data['regular_season_highest_score']['team'] = pro_league.teams[x.team2_id]
+            pro_data['regular_season_highest_score']['week'] = current_week
+
+    write_json_to_file(constants.pro_data_storage_path, pro_data)
+    return pro_data

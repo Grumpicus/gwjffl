@@ -2,9 +2,6 @@ class League(object):
     def __init__(self, league_id, league_name):
         self.id = league_id
         self.name = league_name
-        self.html_standings = ''
-        self.html_prev_week = ''
-        self.html_cur_week = ''
         self.teams = None
         self.results = []
         self.schedule = []
@@ -25,6 +22,7 @@ class Team(object):
         self.streak = ''
         self.rank = 0
         self.icon = ''
+        self.prev_rank = 0
 
 
 class Game(object):

@@ -11,7 +11,8 @@ from ediblepickle import checkpoint
 import classes
 import parsers
 import constants
-import pro_parsers
+from parsers import extract_pro_data
+from jsonstore import pickle_json_to_file, unpickle_json_from_file
 
 
 #noinspection PyUnusedLocal
@@ -21,33 +22,37 @@ def get_html(url, url_type, week, league_label):
     return html
 
 
-def get_league_html(league, week):
-    league.html_standings = get_html(constants.standings_url_template % league.id,
-                                     constants.standings_label,
+def get_league_html(league, week, type):
+    if type is constants.standings:
+        return get_html(constants.standings_url_template % league.id,
+                        constants.standings_label,
                                      week,
                                      league.name.replace(' ', ''))
-    league.html_prev_week = get_html(constants.scores_url_template % (league.id, week - 1),
-                                     constants.results_label,
+    if type is constants.prev_week:
+        return get_html(constants.scores_url_template % (league.id, week - 1),
+                        constants.results_label,
                                      week,
                                      league.name.replace(' ', ''))
-    league.html_cur_week = get_html(constants.scores_url_template % (league.id, week),
-                                    constants.schedule_label,
+    if type is constants.cur_week:
+        return get_html(constants.scores_url_template % (league.id, week),
+                        constants.schedule_label,
                                     week,
                                     league.name.replace(' ', ''))
-    return league
+    return None
 
 
-def parse_league_html(league):
-    league.teams = parsers.parse_standings(league.html_standings)
-    league.schedule = parsers.parse_scores(league.html_cur_week)
+def parse_league_html(league, week):
+    league.teams = parsers.parse_standings(get_league_html(league, week, constants.standings))
+    league = add_prev_week_rankings(league, week)
+    league.schedule = parsers.parse_scores(get_league_html(league, week, constants.cur_week))
 
     for game in league.schedule:
         game.highest_rank = min(league.teams[game.team1_id].rank, league.teams[game.team2_id].rank)
     league.schedule.sort(key=lambda g: g.highest_rank)
 
-    league.results = parsers.parse_scores(league.html_prev_week)
+    league.results = parsers.parse_scores(get_league_html(league, week, constants.prev_week))
     for game in league.results:
-        game.highest_rank = min(league.teams[game.team1_id].rank, league.teams[game.team2_id].rank)
+        game.highest_rank = min(league.teams[game.team1_id].prev_rank, league.teams[game.team2_id].prev_rank)
     league.results.sort(key=lambda g: g.highest_rank)
 
     return league
@@ -67,14 +72,25 @@ def write_output(leagues_data, week, pro_data):
     f1.write(end_week_output)
 
 
+def add_prev_week_rankings(league, current_week):
+    file = constants.league_week_storage_path_template % (current_week - 1, league.id)
+    prev_league = unpickle_json_from_file(file)
+
+    if prev_league is not None:
+        for team_id in league.teams:
+            league.teams[team_id].prev_rank = prev_league.teams[team_id].rank
+
+    return league
+
+
 def main():
     leagues = OrderedDict()
     for x in constants.league_definitions:
         leagues[x[0]] = classes.League(x[0], x[1])
-        leagues[x[0]] = get_league_html(leagues[x[0]], constants.current_week)
-        leagues[x[0]] = parse_league_html(leagues[x[0]])
+        leagues[x[0]] = parse_league_html(leagues[x[0]], constants.current_week)
+        pickle_json_to_file(constants.league_week_storage_path_template % (constants.current_week, x[0]), leagues[x[0]])
 
-    pro_league_data = pro_parsers.extract_pro_data(leagues[constants.pro_league_id], constants.current_week)
+    pro_league_data = extract_pro_data(leagues[constants.pro_league_id], constants.current_week)
 
     write_output(leagues, constants.current_week, pro_league_data)
 

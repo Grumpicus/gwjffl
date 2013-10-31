@@ -1,4 +1,4 @@
-current_week = 7
+current_week = 9
 
 #leagues
 league_definitions = [(131597, 'Pro'),
@@ -8,6 +8,10 @@ league_definitions = [(131597, 'Pro'),
                       (120356, 'Dynasty')]
 
 pro_league_id = 131597
+
+standings = 'standings'
+cur_week = 'cur_week'
+prev_week = 'prev_week'
 
 #edible_pickle
 edible_pickle_dir = 'pickles'
@@ -27,7 +31,8 @@ schedule_label = 'schedule'
 results_label = 'results'
 
 #data_store
-json_storage_path = 'data_store/data.json'
+pro_data_storage_path = 'data_store/data.json'
+league_week_storage_path_template = 'data_store/week%d_league%d.json'
 
 #fleaflicker
 fleaflicker_url = 'http://www.fleaflicker.com'
