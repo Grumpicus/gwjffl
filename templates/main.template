@@ -17,3 +17,10 @@
 <p>&nbsp;</p>
 
 {% endfor %}
+
+<p>
+<span style="font-weight:bold">Legend:</span>
+{% for l in legend %}
+<span style="color:{{ l[0] }};">{{ l[1] }}</span> - {{ legend[l] }}
+{% endfor %}
+</p>

@@ -61,7 +61,8 @@ def write_output(leagues_data, week, pro_data):
     env = Environment(loader=FileSystemLoader(constants.templates_dir), trim_blocks=True)
 
     start_week_template = env.get_template(constants.main_template)
-    start_week_output = start_week_template.render(leagues=leagues_data, current_week=week, pro_data=pro_data)
+    start_week_output = start_week_template.render(leagues=leagues_data, current_week=week, pro_data=pro_data,
+                                                   legend=constants.team_notes)
     f1 = open(constants.start_week_file_path % week, 'w+')
     f1.write(start_week_output)
 

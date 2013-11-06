@@ -19,6 +19,20 @@ def parse_standings(html):
     return sorted_teams
 
 
+def parse_bs4_result_set_into_team_html_notes(rs):
+    for s in rs:
+        classes = s['class']
+        del s['class']
+        del s['id']
+        if 'text-success' in classes:
+            s['style'] = 'font-size:8pt; color:#009900;'
+            s['title'] = constants.team_notes[('#009900', s.string)]
+        if 'text-error' in classes:
+            s['style'] = 'font-size:8pt; color:#990000; text-decoration:line-through;'
+            s['title'] = constants.team_notes[('#990000', s.string)]
+    return ''.join(str(s) for s in rs)
+
+
 def extract_team_info_from_row(row):
     #print(row)
     team = classes.Team()
@@ -33,6 +47,8 @@ def extract_team_info_from_row(row):
     team.url = '%s%s' % (constants.fleaflicker_url, a_team_info['href'])
     start = team.url.find(constants.team_id_param) + len(constants.team_id_param)
     team.id = int(team.url[start:])
+    team.html_notes = parse_bs4_result_set_into_team_html_notes(
+        div_league_name.parent.find_all('span', class_=constants.tt_content_class))
 
     a_user_name = row.find('a', class_=constants.user_name_class)
     team.username = a_user_name.text
@@ -73,6 +89,7 @@ def get_game_info(game_number, soup):
 
 
 def get_team_info(row):
+    #print(row)
     team_info = row.find('a')
     start = team_info['href'].find(constants.team_id_param) + len(constants.team_id_param)
     end = team_info['href'].find('&', start)
@@ -87,6 +104,7 @@ def get_game_link(row):
 
 def extract_pro_data(pro_league, current_week):
     pro_data = read_json_from_file(constants.pro_data_storage_path)
+    #print(pro_data)
     i = 0
     max_pf = 0
     for x in pro_league.teams:

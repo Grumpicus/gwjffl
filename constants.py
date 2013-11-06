@@ -1,4 +1,6 @@
-current_week = 9
+from collections import OrderedDict
+
+current_week = 10
 
 #leagues
 league_definitions = [(131597, 'Pro'),
@@ -40,6 +42,7 @@ scores_url_template = 'http://www.fleaflicker.com/nfl/league-schedule?leagueId=%
 
 user_name_class = 'user-name'
 league_name_class = 'league-name'
+tt_content_class = 'tt-content'
 team_id_param = 'teamId='
 horizontal_spacer_class = 'horizontal-spacer'
 vertical_spacer_class = 'vertical-spacer'
@@ -72,3 +75,14 @@ scoreboard_ids = {
     'game6_team2_id': 'row_1_2_1',
     'game6_box_link_id': 'row_1_2_2'
 }
+
+#OrderedDict for printing in main.template
+team_notes = OrderedDict((x[0], x[1]) for x in [
+    (('#009900', '*'), 'Would make playoffs if season ended now'),
+    (('#009900', 'y'), 'Clinched division'),
+    (('#009900', 'z'), 'Clinched round 1 bye'),
+    (('#009900', 'x'), 'Clinched wildcard'),
+    (('#990000', 'y'), 'Eliminated from division contention'),
+    (('#990000', 'z'), 'Eliminated from round 1 bye contention'),
+    (('#990000', 'o'), 'Eliminated from wildcard contention')
+])

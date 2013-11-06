@@ -15,7 +15,7 @@
 {%- endif -%}
 #{{ team.rank }}</td>
 <td style="width:16px; text-align:center;">{{ team.icon }}</td>
-<td><a href="{{ team.url }}">{{ team.name }}</a> ({{ team.username }})</td>
+<td><a href="{{ team.url }}">{{ team.name }}</a> ({{ team.username }}) {{ team.html_notes }}</td>
 <td>{{ team.wins }}-{{ team.losses }}</td>
 <td>{{ team.div_record }} ({% if team.div_rank == 1 %}<b>{% endif %}#{{ team.div_rank }}{% if team.div_rank == 1 %}</b>{% endif %})</td>
 <td>{{ '%.2f' % team.points_for }}</td>

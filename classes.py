@@ -23,6 +23,7 @@ class Team(object):
         self.rank = 0
         self.icon = ''
         self.prev_rank = 0
+        self.html_notes = ''
 
 
 class Game(object):
