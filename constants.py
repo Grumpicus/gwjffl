@@ -49,6 +49,8 @@ vertical_spacer_class = 'vertical-spacer'
 cell_row_class = 'cell-row'
 scoreboard_class = 'scoreboard'
 projected_class = 'projected'
+text_success_class = 'text-success'
+text_error_class = 'text-error'
 
 scoreboard_ids = {
     'game1_team1_id': 'row_0_0_0',
@@ -77,6 +79,7 @@ scoreboard_ids = {
 }
 
 #OrderedDict for printing in main.template
+team_notes_style_default = 'font-size:8pt; cursor:help; border-bottom:1px dashed;'
 team_notes = OrderedDict((x[0], x[1]) for x in [
     (('#009900', '*'), 'Would make playoffs if season ended now'),
     (('#009900', 'y'), 'Clinched division'),

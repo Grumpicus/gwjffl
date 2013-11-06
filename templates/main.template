@@ -1,8 +1,7 @@
 <img src="http://img707.imageshack.us/img707/8796/gwjfantasyfootballlogo.png">
 <!--break-->
 {% for league_id in leagues %}
-<fieldset style="background-image: linear-gradient(to right, #ffffff 0%,#f3f3f3 100%);">
-<legend style="font-weight: bold; font-size: 1.5em; padding: 0 10px;"><a href="http://www.fleaflicker.com/nfl/league?leagueId={{ leagues[league_id].id }}">{{ leagues[league_id].name }}</a></legend>
+<fieldset style="background-image: linear-gradient(to right, #ffffff 0%,#f3f3f3 100%);"><legend style="font-weight: bold; font-size: 1.5em; padding: 0 10px;"><a href="http://www.fleaflicker.com/nfl/league?leagueId={{ leagues[league_id].id }}">{{ leagues[league_id].name }}</a></legend>
 {% include 'standings.template' %}
 
 {% if league_id == 131597 %}
