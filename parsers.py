@@ -25,11 +25,11 @@ def parse_bs4_result_set_into_team_html_notes(rs):
         del s['class']
         del s['id']
         if constants.text_success_class in classes:
-            s['style'] = '%s color:#009900;' % constants.team_notes_style_default
-            s['title'] = constants.team_notes[('#009900', s.string)]
+            s['style'] = '%s %s' % (constants.team_notes_style_default, constants.text_success_style)
+            s['title'] = constants.team_notes[(constants.text_success_style, s.string)]
         if constants.text_error_class in classes:
-            s['style'] = '%s color:#990000; text-decoration:line-through;' % constants.team_notes_style_default
-            s['title'] = constants.team_notes[('#990000', s.string)]
+            s['style'] = '%s %s' % (constants.team_notes_style_default, constants.text_error_style)
+            s['title'] = constants.team_notes[(constants.text_error_style, s.string)]
     return ''.join(str(s) for s in rs)
 
 

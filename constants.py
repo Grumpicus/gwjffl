@@ -50,7 +50,9 @@ cell_row_class = 'cell-row'
 scoreboard_class = 'scoreboard'
 projected_class = 'projected'
 text_success_class = 'text-success'
+text_success_style = 'color:#009900;'
 text_error_class = 'text-error'
+text_error_style = 'color:#990000; text-decoration:line-through;'
 
 scoreboard_ids = {
     'game1_team1_id': 'row_0_0_0',
@@ -81,11 +83,11 @@ scoreboard_ids = {
 #OrderedDict for printing in main.template
 team_notes_style_default = 'font-size:8pt; cursor:help; border-bottom:1px dashed;'
 team_notes = OrderedDict((x[0], x[1]) for x in [
-    (('#009900', '*'), 'Would make playoffs if season ended now'),
-    (('#009900', 'y'), 'Clinched division'),
-    (('#009900', 'z'), 'Clinched round 1 bye'),
-    (('#009900', 'x'), 'Clinched wildcard'),
-    (('#990000', 'y'), 'Eliminated from division contention'),
-    (('#990000', 'z'), 'Eliminated from round 1 bye contention'),
-    (('#990000', 'o'), 'Eliminated from wildcard contention')
+    ((text_success_style, '*'), 'Would make playoffs if season ended now'),
+    ((text_success_style, 'y'), 'Clinched division'),
+    ((text_success_style, 'z'), 'Clinched round 1 bye'),
+    ((text_success_style, 'x'), 'Clinched wildcard'),
+    ((text_error_style, 'y'), 'Eliminated from division contention'),
+    ((text_error_style, 'z'), 'Eliminated from round 1 bye contention'),
+    ((text_error_style, 'o'), 'Eliminated from wildcard contention')
 ])

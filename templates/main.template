@@ -18,8 +18,8 @@
 {% endfor %}
 
 <p>
-<span style="font-weight:bold">Legend:</span>
+<span style="font-weight:bold">Legend:</span><br/>
 {% for l in legend %}
-<span style="color:{{ l[0] }};">{{ l[1] }}</span> - {{ legend[l] }}
+<span style="{{ l[0] }}">{{ l[1] }}</span> - {{ legend[l] }}
 {% endfor %}
 </p>
