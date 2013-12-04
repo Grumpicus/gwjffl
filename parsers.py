@@ -113,20 +113,28 @@ def get_game_link(row):
 def extract_pro_data(pro_league, current_week):
     pro_data = read_json_from_file(constants.pro_data_storage_path)
     #print(pro_data)
-    if current_week <= 14:
-        i = 0
-        max_pf = 0
-        for x in pro_league.teams:
+    i = 0
+    max_pf = 0
+    for x in pro_league.teams:
+        if current_week <= 14:
             if pro_league.teams[x].div_rank == 1:
                 i += 1
-                ref = 'div%s' % i
-                pro_data[ref] = pro_league.teams[x].name
+                division_ref = 'div%s' % i
+                pro_data[division_ref] = pro_league.teams[x].name
             if pro_league.teams[x].rank == 1:
                 pro_data['number_one'] = pro_league.teams[x].name
             if pro_league.teams[x].points_for > max_pf:
                 max_pf = pro_league.teams[x].points_for
                 pro_data['regular_season_most_points']['team'] = pro_league.teams[x].name
                 pro_data['regular_season_most_points']['points'] = pro_league.teams[x].points_for
+        elif current_week == 17:
+            if pro_league.teams[x].rank == 1:
+                pro_data['first'] = pro_league.teams[x].name
+            if pro_league.teams[x].rank == 2:
+                pro_data['second'] = pro_league.teams[x].name
+            if pro_league.teams[x].rank == 3:
+                pro_data['third'] = pro_league.teams[x].name
+            pro_data['consolation_champ'] = ''
 
     if current_week <= 14:
         highest_score = 'regular_season_highest_score'
@@ -141,12 +149,6 @@ def extract_pro_data(pro_league, current_week):
             pro_data[highest_score]['points'] = x.team2_score
             pro_data[highest_score]['team'] = pro_league.teams[x.team2_id]
             pro_data[highest_score]['week'] = current_week
-
-    if current_week == 17:
-        pro_data['first'] = ''
-        pro_data['second'] = ''
-        pro_data['third'] = ''
-        pro_data['consolation_champ'] = ''
 
     write_json_to_file(constants.pro_data_storage_path, pro_data)
     return pro_data
