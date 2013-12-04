@@ -1,6 +1,6 @@
 from collections import OrderedDict
 
-current_week = 10
+current_week = 14
 
 #leagues
 league_definitions = [(131597, 'Pro'),
@@ -32,7 +32,7 @@ cur_week_label = 'cur_week'
 prev_week_label = 'prev_week'
 
 #data_store
-pro_data_storage_path = 'data_store/data.json'
+pro_data_storage_path = 'data_store/pro_data.json'
 league_week_storage_path_template = 'data_store/week%d_league%d.json'
 
 #fleaflicker
@@ -80,8 +80,8 @@ scoreboard_ids = {
     'game6_box_link_id': 'row_1_2_2'
 }
 
-#OrderedDict for printing in main.template
 team_notes_style_default = 'font-size:8pt; cursor:help; border-bottom:1px dashed;'
+#OrderedDict for printing in main.template
 team_notes = OrderedDict((x[0], x[1]) for x in [
     ((text_success_style, '*'), 'Would make playoffs if season ended now'),
     ((text_success_style, 'y'), 'Clinched division'),

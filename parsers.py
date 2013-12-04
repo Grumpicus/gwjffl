@@ -21,13 +21,13 @@ def parse_standings(html):
 
 def parse_bs4_result_set_into_team_html_notes(rs):
     for s in rs:
-        classes = s['class']
+        css_classes = s['class']
         del s['class']
         del s['id']
-        if constants.text_success_class in classes:
+        if constants.text_success_class in css_classes:
             s['style'] = '%s %s' % (constants.team_notes_style_default, constants.text_success_style)
             s['title'] = constants.team_notes[(constants.text_success_style, s.string)]
-        if constants.text_error_class in classes:
+        if constants.text_error_class in css_classes:
             s['style'] = '%s %s' % (constants.team_notes_style_default, constants.text_error_style)
             s['title'] = constants.team_notes[(constants.text_error_style, s.string)]
     return ''.join(str(s) for s in rs)
@@ -78,14 +78,22 @@ def extract_team_info_from_row(row):
 
 def parse_scores(html):
     soup = BeautifulSoup(html)
-    return [get_game_info(i, soup) for i in range(1, 7)]
+    scores = []
+    for i in range(1, 7):
+        score = get_game_info(i, soup)
+        if score is not None:
+            scores.append(score)
+    return scores
 
 
 def get_game_info(game_number, soup):
     team1_row = soup.find(id=constants.scoreboard_ids['game%d_team1_id' % game_number])
     team2_row = soup.find(id=constants.scoreboard_ids['game%d_team2_id' % game_number])
     game_link_row = soup.find(id=constants.scoreboard_ids['game%d_box_link_id' % game_number])
-    return classes.Game(get_team_info(team1_row), get_team_info(team2_row), get_game_link(game_link_row))
+    if team1_row and team2_row and game_link_row:
+        return classes.Game(get_team_info(team1_row), get_team_info(team2_row), get_game_link(game_link_row))
+    else:
+        return None
 
 
 def get_team_info(row):
@@ -105,29 +113,40 @@ def get_game_link(row):
 def extract_pro_data(pro_league, current_week):
     pro_data = read_json_from_file(constants.pro_data_storage_path)
     #print(pro_data)
-    i = 0
-    max_pf = 0
-    for x in pro_league.teams:
-        if pro_league.teams[x].div_rank == 1:
-            i += 1
-            ref = 'div%s' % i
-            pro_data[ref] = pro_league.teams[x].name
-        if pro_league.teams[x].rank == 1:
-            pro_data['number_one'] = pro_league.teams[x].name
-        if pro_league.teams[x].points_for > max_pf:
-            max_pf = pro_league.teams[x].points_for
-            pro_data['regular_season_most_points']['team'] = pro_league.teams[x].name
-            pro_data['regular_season_most_points']['points'] = pro_league.teams[x].points_for
+    if current_week <= 14:
+        i = 0
+        max_pf = 0
+        for x in pro_league.teams:
+            if pro_league.teams[x].div_rank == 1:
+                i += 1
+                ref = 'div%s' % i
+                pro_data[ref] = pro_league.teams[x].name
+            if pro_league.teams[x].rank == 1:
+                pro_data['number_one'] = pro_league.teams[x].name
+            if pro_league.teams[x].points_for > max_pf:
+                max_pf = pro_league.teams[x].points_for
+                pro_data['regular_season_most_points']['team'] = pro_league.teams[x].name
+                pro_data['regular_season_most_points']['points'] = pro_league.teams[x].points_for
 
+    if current_week <= 14:
+        highest_score = 'regular_season_highest_score'
+    else:
+        highest_score = 'postseason_highest_score'
     for x in pro_league.results:
-        if x.team1_score > pro_data['regular_season_highest_score']['points']:
-            pro_data['regular_season_highest_score']['points'] = x.team1_score
-            pro_data['regular_season_highest_score']['team'] = pro_league.teams[x.team1_id]
-            pro_data['regular_season_highest_score']['week'] = current_week
-        if x.team2_score > pro_data['regular_season_highest_score']['points']:
-            pro_data['regular_season_highest_score']['points'] = x.team2_score
-            pro_data['regular_season_highest_score']['team'] = pro_league.teams[x.team2_id]
-            pro_data['regular_season_highest_score']['week'] = current_week
+        if x.team1_score > pro_data[highest_score]['points']:
+            pro_data[highest_score]['points'] = x.team1_score
+            pro_data[highest_score]['team'] = pro_league.teams[x.team1_id]
+            pro_data[highest_score]['week'] = current_week
+        if x.team2_score > pro_data[highest_score]['points']:
+            pro_data[highest_score]['points'] = x.team2_score
+            pro_data[highest_score]['team'] = pro_league.teams[x.team2_id]
+            pro_data[highest_score]['week'] = current_week
+
+    if current_week == 17:
+        pro_data['first'] = ''
+        pro_data['second'] = ''
+        pro_data['third'] = ''
+        pro_data['consolation_champ'] = ''
 
     write_json_to_file(constants.pro_data_storage_path, pro_data)
     return pro_data

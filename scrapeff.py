@@ -43,16 +43,16 @@ def get_league_html(league, week, type):
 def parse_league_html(league, week):
     league.teams = parse_standings(get_league_html(league, week, constants.standings_label))
     league = add_prev_week_rankings(league, week)
-    league.schedule = parse_scores(get_league_html(league, week, constants.cur_week_label))
-
-    for game in league.schedule:
-        game.highest_rank = min(league.teams[game.team1_id].rank, league.teams[game.team2_id].rank)
-    league.schedule.sort(key=lambda g: g.highest_rank)
 
     league.results = parse_scores(get_league_html(league, week, constants.prev_week_label))
     for game in league.results:
         game.highest_rank = min(league.teams[game.team1_id].prev_rank, league.teams[game.team2_id].prev_rank)
     league.results.sort(key=lambda g: g.highest_rank)
+
+    league.schedule = parse_scores(get_league_html(league, week, constants.cur_week_label))
+    for game in league.schedule:
+        game.highest_rank = min(league.teams[game.team1_id].rank, league.teams[game.team2_id].rank)
+    league.schedule.sort(key=lambda g: g.highest_rank)
 
     return league
 
@@ -84,6 +84,10 @@ def add_prev_week_rankings(league, current_week):
 
 
 def main():
+    if constants.current_week < 0 or constants.current_week > 17:
+        print('ERROR: Invalid current week: %d' % constants.current_week)
+        return
+
     leagues = OrderedDict()
     for x in constants.league_definitions:
         leagues[x[0]] = League(x[0], x[1])
