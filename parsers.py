@@ -140,15 +140,17 @@ def extract_pro_data(pro_league, current_week):
         highest_score = 'regular_season_highest_score'
     else:
         highest_score = 'postseason_highest_score'
+    if pro_data[highest_score] is None:
+        pro_data[highest_score] = {'points': 0, 'team': None, 'week': None}
     for x in pro_league.results:
         if x.team1_score > pro_data[highest_score]['points']:
             pro_data[highest_score]['points'] = x.team1_score
-            pro_data[highest_score]['team'] = pro_league.teams[x.team1_id]
-            pro_data[highest_score]['week'] = current_week
+            pro_data[highest_score]['team'] = pro_league.teams[x.team1_id].name
+            pro_data[highest_score]['week'] = current_week - 1
         if x.team2_score > pro_data[highest_score]['points']:
             pro_data[highest_score]['points'] = x.team2_score
-            pro_data[highest_score]['team'] = pro_league.teams[x.team2_id]
-            pro_data[highest_score]['week'] = current_week
+            pro_data[highest_score]['team'] = pro_league.teams[x.team2_id].name
+            pro_data[highest_score]['week'] = current_week - 1
 
     write_json_to_file(constants.pro_data_storage_path, pro_data)
     return pro_data

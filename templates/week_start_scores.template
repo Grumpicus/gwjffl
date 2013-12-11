@@ -1,4 +1,4 @@
 <table>
-<tr><th colspan="5" style="text-align:center;"><span title="Rankings shown are as of when the game was played" style="cursor:help; border-bottom:1px dashed; color:#009900;">Results - Week {{ current_week-1 }}</span></th></tr>
+<tr><th colspan="5" style="text-align:center;"><span title="Rankings shown are when the game was played" style="cursor:help; border-bottom:1px dashed; color:#009900;">Results - Week {{ current_week-1 }}</span></th></tr>
 {% include 'scores.template' %}
 </table>

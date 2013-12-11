@@ -1,6 +1,6 @@
 from collections import OrderedDict
 
-current_week = 14
+current_week = 15
 
 #leagues
 league_definitions = [(131597, 'Pro'),

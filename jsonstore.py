@@ -13,8 +13,10 @@ def read_json_from_file(filename):
 
 
 def write_json_to_file(filename, data):
+    # We do it this way because json.dump can corrupt the file if there's a serialization error.
+    json_data = json.dumps(data)
     with open(filename, 'w') as outfile:
-        json.dump(data, outfile)
+        outfile.write(json_data)
     return
 
 
