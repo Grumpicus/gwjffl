@@ -10,6 +10,7 @@ from jsonstore import read_json_from_file, write_json_to_file
 def parse_standings(html):
     teams = []
     soup = BeautifulSoup(html)
+    page_data = soup.find(id='page-data')  # unused for now
     rows = soup.find_all('tr', class_=constants.cell_row_class)
     for row in rows:
         teams.append(extract_team_info_from_row(row))
@@ -49,9 +50,11 @@ def extract_team_info_from_row(row):
     team.id = int(team.url[start:])
     team.html_notes = parse_bs4_result_set_into_team_html_notes(
         div_league_name.parent.find_all('span', class_=constants.tt_content_class))
+    team.trophy = div_league_name.find(class_=constants.icon_trophy_class) is not None
 
     a_user_name = row.find('a', class_=constants.user_name_class)
     team.username = a_user_name.text
+    team.inactive = constants.inactive_class in a_user_name['class']
 
     second_td_horizontal_spacer = row.find_all('td', class_=constants.horizontal_spacer_class)[1]
     td_wins = second_td_horizontal_spacer.next_sibling
@@ -134,7 +137,7 @@ def extract_pro_data(pro_league, current_week):
                 pro_data['second'] = pro_league.teams[x].name
             if pro_league.teams[x].rank == 3:
                 pro_data['third'] = pro_league.teams[x].name
-            pro_data['consolation_champ'] = ''
+            pro_data['consolation_champ'] = 'Leap\'s Peeps'  # TODO: Parse the playoff bracket
 
     if current_week <= 14:
         highest_score = 'regular_season_highest_score'

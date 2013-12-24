@@ -1,1 +1,1 @@
-See https://pypi.python.org/pypi/ediblepickle/1.0.2 for more information
+See https://pypi.python.org/pypi/ediblepickle/ for more information

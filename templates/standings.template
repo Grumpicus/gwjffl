@@ -15,7 +15,8 @@
 {%- endif -%}
 #{{ team.rank }}</td>
 <td style="width:16px; text-align:center;">{{ team.icon }}</td>
-<td><a href="{{ team.url }}">{{ team.name }}</a> ({{ team.username }}) {{ team.html_notes }}</td>
+<td><a href="{{ team.url }}">{{ team.name }}</a> ({{ team.username }}) {% if current_week < 14 %}{{ team.html_notes }}{% endif %} {% if current_week == 17 and team.trophy %}<img src="/files/smileys/icon_cool.gif" title="League Champ!" style="vertical-align:text-bottom;">{% endif %} {% if current_week < 16 and team.inactive %}<img src="/files/smileys/icon_sad.gif" title="inactive">{% endif %}
+</td>
 <td>{{ team.wins }}-{{ team.losses }}</td>
 <td>{{ team.div_record }} ({% if team.div_rank == 1 %}<b>{% endif %}#{{ team.div_rank }}{% if team.div_rank == 1 %}</b>{% endif %})</td>
 <td>{{ '%.2f' % team.points_for }}</td>

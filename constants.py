@@ -1,6 +1,6 @@
 from collections import OrderedDict
 
-current_week = 15
+current_week = 17
 
 #leagues
 league_definitions = [(131597, 'Pro'),
@@ -53,6 +53,8 @@ text_success_class = 'text-success'
 text_success_style = 'color:#009900;'
 text_error_class = 'text-error'
 text_error_style = 'color:#990000; text-decoration:line-through;'
+icon_trophy_class = 'icon-trophy'
+inactive_class = 'inactive'
 
 scoreboard_ids = {
     'game1_team1_id': 'row_0_0_0',

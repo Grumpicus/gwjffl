@@ -12,8 +12,6 @@ from classes import League
 from parsers import extract_pro_data, parse_standings, parse_scores
 from jsonstore import pickle_json_to_file, unpickle_json_from_file
 
-
-
 #noinspection PyUnusedLocal
 @checkpoint(key=Template(constants.edible_pickle_template), work_dir=constants.edible_pickle_dir)
 def get_html(url, url_type, week, league_label):
@@ -49,10 +47,11 @@ def parse_league_html(league, week):
         game.highest_rank = min(league.teams[game.team1_id].prev_rank, league.teams[game.team2_id].prev_rank)
     league.results.sort(key=lambda g: g.highest_rank)
 
-    league.schedule = parse_scores(get_league_html(league, week, constants.cur_week_label))
-    for game in league.schedule:
-        game.highest_rank = min(league.teams[game.team1_id].rank, league.teams[game.team2_id].rank)
-    league.schedule.sort(key=lambda g: g.highest_rank)
+    if constants.current_week < 17:
+        league.schedule = parse_scores(get_league_html(league, week, constants.cur_week_label))
+        for game in league.schedule:
+            game.highest_rank = min(league.teams[game.team1_id].rank, league.teams[game.team2_id].rank)
+        league.schedule.sort(key=lambda g: g.highest_rank)
 
     return league
 

@@ -24,6 +24,8 @@ class Team(object):
         self.icon = ''
         self.prev_rank = 0
         self.html_notes = ''
+        self.trophy = False
+        self.inactive = False
 
 
 class Game(object):

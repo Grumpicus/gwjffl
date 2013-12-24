@@ -10,16 +10,20 @@
 
 {% include 'week_start_scores.template' %}
 
+{% if leagues[league_id].schedule %}
 {% include 'schedule.template' %}
-
+{% endif %}
 </fieldset>
+
 <p>&nbsp;</p>
 
 {% endfor %}
 
+{% if current_week < 14 %}
 <p>
 <span style="font-weight:bold">Legend:</span><br/>
 {% for l in legend %}
 <span style="{{ l[0] }}">{{ l[1] }}</span> - {{ legend[l] }}
 {% endfor %}
 </p>
+{% endif %}
