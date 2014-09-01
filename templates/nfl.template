@@ -1,0 +1,14 @@
+<div style="float:left;">
+<strong>Early games:</strong>
+<ul>
+{% for m in nfl_data.matchups %}
+<li>{{ nfl_data.first_date }}, {{ m.time }}: {{ m.teams }}</li>
+{% endfor %}
+</ul>
+<strong>Byes:</strong> {{ nfl_data.byes }}
+</div>
+<div style="clear:both;">
+<strong>What to watch in week {{ nfl_data.week }}: <em>{{ nfl_data.gotw.title }}</em></strong>
+<blockquote>{{ nfl_data.gotw.text }}</blockquote>
+<div style="text-align:right;">Source: {{ nfl_data.source }}</div>
+</div>

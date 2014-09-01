@@ -36,3 +36,20 @@ class Game(object):
         self.team2_score = float(team2[1])
         self.highest_rank = 0
         self.box_link = link
+
+
+class NFL_Week(object):
+    def __init__(self, week):
+        self.week = week
+        self.byes = ''
+        self.dates = ''
+        self.gotw = {}
+        self.matchups = []
+        self.first_date = ''
+        self.source = ''
+
+
+class NFL_Game(object):
+    def __init__(self):
+        self.time = None
+        self.teams = ''

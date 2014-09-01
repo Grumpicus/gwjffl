@@ -9,8 +9,10 @@ from ediblepickle import checkpoint
 
 import constants
 from classes import League
-from parsers import extract_pro_data, parse_standings, parse_scores
+from parsers import extract_pro_data, parse_standings, parse_scores, parse_nfl_html
 from jsonstore import pickle_json_to_file, unpickle_json_from_file
+
+
 
 #noinspection PyUnusedLocal
 @checkpoint(key=Template(constants.edible_pickle_template), work_dir=constants.edible_pickle_dir)
@@ -38,14 +40,22 @@ def get_league_html(league, week, type):
     return None
 
 
+def get_nfl_html(week):
+    return get_html(constants.nfl_schedule_url_template % (constants.current_year, week),
+                    constants.schedule_label,
+                    week,
+                    'NFL')
+
+
 def parse_league_html(league, week):
     league.teams = parse_standings(get_league_html(league, week, constants.standings_label))
     league = add_prev_week_rankings(league, week)
 
-    league.results = parse_scores(get_league_html(league, week, constants.prev_week_label))
-    for game in league.results:
-        game.highest_rank = min(league.teams[game.team1_id].prev_rank, league.teams[game.team2_id].prev_rank)
-    league.results.sort(key=lambda g: g.highest_rank)
+    if constants.current_week > 1:
+        league.results = parse_scores(get_league_html(league, week, constants.prev_week_label))
+        for game in league.results:
+            game.highest_rank = min(league.teams[game.team1_id].prev_rank, league.teams[game.team2_id].prev_rank)
+        league.results.sort(key=lambda g: g.highest_rank)
 
     if constants.current_week < 17:
         league.schedule = parse_scores(get_league_html(league, week, constants.cur_week_label))
@@ -56,12 +66,12 @@ def parse_league_html(league, week):
     return league
 
 
-def write_output(leagues_data, week, pro_data):
+def write_output(leagues_data, week, pro_data, nfl_data):
     env = Environment(loader=FileSystemLoader(constants.templates_dir), trim_blocks=True)
 
     start_week_template = env.get_template(constants.main_template)
     start_week_output = start_week_template.render(leagues=leagues_data, current_week=week, pro_data=pro_data,
-                                                   legend=constants.team_notes)
+                                                   legend=constants.team_notes, nfl_data=nfl_data)
     f1 = open(constants.start_week_file_path % week, 'w+')
     f1.write(start_week_output)
 
@@ -95,7 +105,9 @@ def main():
 
     pro_league_data = extract_pro_data(leagues[constants.pro_league_id], constants.current_week)
 
-    write_output(leagues, constants.current_week, pro_league_data)
+    nfl_week_data = parse_nfl_html(get_nfl_html(constants.current_week))
+
+    write_output(leagues, constants.current_week, pro_league_data, nfl_week_data)
 
 
 if __name__ == "__main__":

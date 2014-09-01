@@ -1,14 +1,19 @@
-<img src="http://img707.imageshack.us/img707/8796/gwjfantasyfootballlogo.png">
+<img src="http://i.imgur.com/KjKjmA7.png" style="float:left;">
+{% include 'nfl.template' %}
+
 <!--break-->
+
 {% for league_id in leagues %}
 <fieldset style="background-image: linear-gradient(to right, #ffffff 0%,#f3f3f3 100%);"><legend style="font-weight: bold; font-size: 1.5em; padding: 0 10px;"><a href="http://www.fleaflicker.com/nfl/league?leagueId={{ leagues[league_id].id }}">{{ leagues[league_id].name }}</a></legend>
 {% include 'standings.template' %}
 
-{% if league_id == 131597 %}
+{% if league_id == 131597 and current_week > 1 %}
 {% include 'pro.template' %}
 {% endif %}
 
+{% if current_week > 1 %}
 {% include 'week_start_scores.template' %}
+{% endif %}
 
 {% if leagues[league_id].schedule %}
 {% include 'schedule.template' %}
@@ -19,7 +24,7 @@
 
 {% endfor %}
 
-{% if current_week < 14 %}
+{% if current_week > 1 and current_week < 14 %}
 <p>
 <span style="font-weight:bold">Legend:</span><br/>
 {% for l in legend %}

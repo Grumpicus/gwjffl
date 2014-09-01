@@ -1,6 +1,7 @@
 from collections import OrderedDict
 
-current_week = 17
+current_year = 2014
+current_week = 1
 
 #leagues
 league_definitions = [(131597, 'Pro'),
@@ -93,3 +94,14 @@ team_notes = OrderedDict((x[0], x[1]) for x in [
     ((text_error_style, 'z'), 'Eliminated from round 1 bye contention'),
     ((text_error_style, 'o'), 'Eliminated from wildcard contention')
 ])
+
+#nfl
+nfl_schedule_url_template = 'http://www.nfl.com/schedules/%d/REG%d'
+
+nfl_schedules_div_class = 'schedules'
+nfl_schedules_header_byes_span_class = 'schedules-header-byes'
+nfl_bye_team_span_class = 'bye-team'
+nfl_schedules_list_date_div_class = 'schedules-list-date'
+nfl_schedules_centerpiece_div_id = 'schedules-centerpiece'
+nfl_schedules_table_ul_class = 'schedules-table'
+nfl_schedules_list_matchup_li_class = 'schedules-list-matchup'
