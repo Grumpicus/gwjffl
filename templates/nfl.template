@@ -8,7 +8,5 @@
 <strong>Byes:</strong> {{ nfl_data.byes }}
 </div>
 <div style="clear:both;">
-<strong>What to watch in week {{ nfl_data.week }}: <em>{{ nfl_data.gotw.title }}</em></strong>
-<blockquote>{{ nfl_data.gotw.text }}</blockquote>
 <div style="text-align:right;">Source: {{ nfl_data.source }}</div>
 </div>

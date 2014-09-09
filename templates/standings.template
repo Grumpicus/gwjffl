@@ -4,7 +4,7 @@
 {% for team_id in leagues[league_id].teams %}
 {% set team = leagues[league_id].teams[team_id] %}
 <tr>
-{% set change = team.prev_rank - team.rank %}
+{% set change = team.prev_rank - team.rank if team.prev_rank > 0 else 0 %}
 <td style="width:60px; text-align:right;
 {%- if change == 0 -%}
 ">
@@ -13,7 +13,7 @@
 {%- else %}
  color:#990000" title="{{ change }}">
 {%- endif -%}
-#{{ team.rank }}</td>
+{% if team.rank > 0 %}#{{ team.rank }}{% endif %}</td>
 <td style="width:16px; text-align:center;">{{ team.icon }}</td>
 <td><a href="{{ team.url }}">{{ team.name }}</a> ({{ team.username }}) {% if current_week < 14 %}{{ team.html_notes }}{% endif %} {% if current_week == 17 and team.trophy %}<img src="/files/smileys/icon_cool.gif" title="League Champ!" style="vertical-align:text-bottom;">{% endif %} {% if current_week < 16 and team.inactive %}<img src="/files/smileys/icon_sad.gif" title="inactive">{% endif %}
 </td>

@@ -2,15 +2,15 @@ from collections import OrderedDict
 
 from bs4 import BeautifulSoup
 
-import classes
-import constants
-from jsonstore import read_json_from_file, write_json_to_file
+from gwjffl import constants
+from gwjffl.classes import gwjffl
+from gwjffl.io.jsonstore import read_json_from_file, write_json_to_file
 
 
 def parse_standings(html):
     teams = []
     soup = BeautifulSoup(html)
-    page_data = soup.find(id='page-data')  # unused for now
+    # page_data = soup.find(id='page-data')  # unused for now
     rows = soup.find_all('tr', class_=constants.cell_row_class)
     for row in rows:
         teams.append(extract_team_info_from_row(row))
@@ -35,8 +35,8 @@ def parse_bs4_result_set_into_team_html_notes(rs):
 
 
 def extract_team_info_from_row(row):
-    #print(row)
-    team = classes.Team()
+    # print(row)
+    team = gwjffl.Team()
 
     td_div_rank = row.contents[0]
     team.div_rank = int(td_div_rank.text)
@@ -94,13 +94,13 @@ def get_game_info(game_number, soup):
     team2_row = soup.find(id=constants.scoreboard_ids['game%d_team2_id' % game_number])
     game_link_row = soup.find(id=constants.scoreboard_ids['game%d_box_link_id' % game_number])
     if team1_row and team2_row and game_link_row:
-        return classes.Game(get_team_info(team1_row), get_team_info(team2_row), get_game_link(game_link_row))
+        return gwjffl.Game(get_team_info(team1_row), get_team_info(team2_row), get_game_link(game_link_row))
     else:
         return None
 
 
 def get_team_info(row):
-    #print(row)
+    # print(row)
     team_info = row.find('a')
     start = team_info['href'].find(constants.team_id_param) + len(constants.team_id_param)
     end = team_info['href'].find('&', start)
@@ -116,7 +116,7 @@ def get_game_link(row):
 def extract_pro_data(pro_league, current_week):
     pro_data = read_json_from_file(constants.pro_data_storage_path)
     pro_data = pro_data if pro_data is not None else {}
-    #print(pro_data)
+    # print(pro_data)
     i = 0
     max_pf = -1
     for x in pro_league.teams:
@@ -160,38 +160,3 @@ def extract_pro_data(pro_league, current_week):
 
     write_json_to_file(constants.pro_data_storage_path, pro_data)
     return pro_data
-
-
-def parse_nfl_html(html):
-    soup = BeautifulSoup(html)
-    #print(soup)
-    schedule_data = soup.find('div', class_=constants.nfl_schedules_div_class)
-    #print(schedule_data.prettify())
-
-    nfl_data = classes.NFL_Week(constants.current_week)
-    nfl_data.source = constants.nfl_schedule_url_template % (constants.current_year, constants.current_week)
-
-    byes = schedule_data.find('span', class_=constants.nfl_schedules_header_byes_span_class)
-    bye_teams = byes.find('span', class_=constants.nfl_bye_team_span_class)
-    nfl_data.byes = 'None' if bye_teams is None else bye_teams.get_text("", strip=True)
-    nfl_data.dates = schedule_data.find('div', class_=constants.nfl_schedules_list_date_div_class).contents[0]
-
-    gotw = schedule_data.find('div', id=constants.nfl_schedules_centerpiece_div_id)
-    nfl_data.gotw['label'] = gotw.find('h5').text
-    nfl_data.gotw['title'] = gotw.find('h2').text
-    nfl_data.gotw['text'] = gotw.find('p').text
-
-    schedules_table = schedule_data.find('ul', class_=constants.nfl_schedules_table_ul_class)
-    first_li = schedules_table.find('li')
-    nfl_data.first_date = first_li.find('span')
-    for sibling in first_li.find_next_siblings('li'):
-        # print(sibling)
-        if 'schedules-list-date' in sibling['class']:
-            break
-        else:
-            matchup = classes.NFL_Game()
-            matchup.time = sibling.find('div', class_='list-matchup-row-time').get_text(" ", strip=True)
-            matchup.teams = sibling.find('div', class_='list-matchup-row-team').get_text(" ", strip=True)
-            nfl_data.matchups.append(matchup)
-
-    return nfl_data

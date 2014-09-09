@@ -1,4 +1,4 @@
-#python_version: 3.3.2
+# python_version: 3.3.2
 
 from urllib.request import urlopen
 from collections import OrderedDict
@@ -7,32 +7,33 @@ from string import Template
 from jinja2 import Environment, FileSystemLoader
 from ediblepickle import checkpoint
 
-import constants
-from classes import League
-from parsers import extract_pro_data, parse_standings, parse_scores, parse_nfl_html
-from jsonstore import pickle_json_to_file, unpickle_json_from_file
+from gwjffl import constants
+from gwjffl.classes.gwjffl import League
+from gwjffl.parsers.gwjffl import extract_pro_data, parse_standings, parse_scores
+from gwjffl.parsers.nfl import parse_nfl_html
+from gwjffl.io.jsonstore import pickle_json_to_file, unpickle_json_from_file
 
 
 
-#noinspection PyUnusedLocal
+# noinspection PyUnusedLocal
 @checkpoint(key=Template(constants.edible_pickle_template), work_dir=constants.edible_pickle_dir)
 def get_html(url, url_type, week, league_label):
     html = urlopen(url).read()
     return html
 
 
-def get_league_html(league, week, type):
-    if type is constants.standings_label:
+def get_league_html(league, week, html_type):
+    if html_type is constants.standings_label:
         return get_html(constants.standings_url_template % league.id,
                         constants.standings_label,
                         week,
                         league.name.replace(' ', ''))
-    if type is constants.prev_week_label:
+    if html_type is constants.prev_week_label:
         return get_html(constants.scores_url_template % (league.id, week - 1),
                         constants.results_label,
                         week,
                         league.name.replace(' ', ''))
-    if type is constants.cur_week_label:
+    if html_type is constants.cur_week_label:
         return get_html(constants.scores_url_template % (league.id, week),
                         constants.schedule_label,
                         week,

@@ -1,9 +1,9 @@
 from collections import OrderedDict
 
 current_year = 2014
-current_week = 1
+current_week = 2
 
-#leagues
+# leagues
 league_definitions = [(131597, 'Pro'),
                       (34260, 'Division I'),
                       (33978, 'Division II'),
@@ -13,17 +13,17 @@ league_definitions = [(131597, 'Pro'),
 pro_league_id = 131597
 
 #edible_pickle
-edible_pickle_dir = 'pickles'
+edible_pickle_dir = '../pickles'
 edible_pickle_template = 'week{2}_{1}_{3}.html'
 
 #templates
-templates_dir = 'templates'
+templates_dir = '../templates'
 main_template = 'main.template'
 week_end_scores_template = 'week_end_scores.template'
 
 #output
-start_week_file_path = 'output/start_week%d.html'
-end_week_file_path = 'output/end_week%d.html'
+start_week_file_path = '../output/start_week%d.html'
+end_week_file_path = '../output/end_week%d.html'
 
 #misc
 standings_label = 'standings'
@@ -33,8 +33,8 @@ cur_week_label = 'cur_week'
 prev_week_label = 'prev_week'
 
 #data_store
-pro_data_storage_path = 'data_store/pro_data.json'
-league_week_storage_path_template = 'data_store/week%d_league%d.json'
+pro_data_storage_path = '../data_store/pro_data.json'
+league_week_storage_path_template = '../data_store/week%d_league%d.json'
 
 #fleaflicker
 fleaflicker_url = 'http://www.fleaflicker.com'
