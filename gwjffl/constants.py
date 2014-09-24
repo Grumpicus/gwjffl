@@ -1,7 +1,7 @@
 from collections import OrderedDict
 
 current_year = 2014
-current_week = 2
+current_week = 4
 
 # leagues
 league_definitions = [(131597, 'Pro'),
@@ -12,7 +12,7 @@ league_definitions = [(131597, 'Pro'),
 
 pro_league_id = 131597
 
-#edible_pickle
+# edible_pickle
 edible_pickle_dir = '../pickles'
 edible_pickle_template = 'week{2}_{1}_{3}.html'
 

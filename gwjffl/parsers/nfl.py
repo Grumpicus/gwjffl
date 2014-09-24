@@ -8,14 +8,14 @@ def parse_nfl_html(html):
     soup = BeautifulSoup(html)
     # print(soup)
     schedule_data = soup.find('div', class_=constants.nfl_schedules_div_class)
-    #print(schedule_data.prettify())
+    # print(schedule_data.prettify())
 
     nfl_data = nfl.Week(constants.current_week)
     nfl_data.source = constants.nfl_schedule_url_template % (constants.current_year, constants.current_week)
 
     byes = schedule_data.find('span', class_=constants.nfl_schedules_header_byes_span_class)
     bye_teams = byes.find('span', class_=constants.nfl_bye_team_span_class)
-    nfl_data.byes = 'None' if bye_teams is None else bye_teams.get_text("", strip=True)
+    nfl_data.byes = 'None' if bye_teams is None else bye_teams.get_text("", strip=True).replace(",", ", ")
     #nfl_data.dates = schedule_data.find('div', class_=constants.nfl_schedules_list_date_div_class).contents[0]
 
     #TODO: GOTW apparently only available in the preseason. Do something different in 2015?
