@@ -15,7 +15,7 @@
 {%- endif -%}
 {% if team.rank > 0 %}#{{ team.rank }}{% endif %}</td>
 <td style="width:16px; text-align:center;">{{ team.icon }}</td>
-<td><a href="{{ team.url }}">{{ team.name }}</a> ({{ team.username }}) {% if current_week < 14 %}{{ team.html_notes }}{% endif %} {% if current_week == 17 and team.trophy %}<img src="/files/smileys/icon_cool.gif" title="League Champ!" style="vertical-align:text-bottom;">{% endif %} {% if current_week < 16 and team.inactive %}<img src="/files/smileys/icon_sad.gif" title="inactive">{% endif %}
+<td><a href="{{ team.url }}">{{ team.name }}</a> (<span title="Last Sign In {{ team.last_sign_in }}{% if team.inactive %} (inactive){% endif %}">{{ team.username }}{% if current_week < 16 and team.inactive %} <img style="cursor:help; border-bottom:1px dashed; vertical-align: text-bottom;" src="/files/smileys/icon_exclaim.gif" title="WARNING: Inactive managers risk being banned from future seasons.">{% endif %}</span>) {% if current_week < 14 %}{{ team.html_notes }}{% endif %} {% if current_week == 17 and team.trophy %}<img src="/files/smileys/icon_cool.gif" title="League Champ!" style="vertical-align:text-bottom;">{% endif %}
 </td>
 <td>{{ team.wins }}-{{ team.losses }}</td>
 <td>{{ team.div_record }} ({% if team.div_rank == 1 %}<b>{% endif %}#{{ team.div_rank }}{% if team.div_rank == 1 %}</b>{% endif %})</td>

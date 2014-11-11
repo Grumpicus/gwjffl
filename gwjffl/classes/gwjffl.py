@@ -26,6 +26,7 @@ class Team(object):
         self.html_notes = ''
         self.trophy = False
         self.inactive = False
+        self.last_sign_in = ''
 
 
 class Game(object):

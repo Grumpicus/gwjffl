@@ -6,7 +6,7 @@
 <tr><td style="text-align:right; width:50%;">Division Winner ($15):</td><td>{{ pro_data.div2 }}</td></tr>
 <tr><td style="text-align:right; width:50%;">Division Winner ($15):</td><td>{{ pro_data.div3 }}</td></tr>
 <tr><td style="text-align:right; width:50%;">Division Winner ($15):</td><td>{{ pro_data.div4 }}</td></tr>
-<tr><td style="text-align:right; width:50%;">Highest single-week team total ($10):</td><td>{{ pro_data.regular_season_highest_score.team }} ({{ '%.2f' % pro_data.regular_season_highest_score.points }} in week {{ pro_data.regular_season_highest_score.week }}){% if pro_data.regular_season_highest_score.week == current_week %} <span style="color:#d33a1c; font-weight:bold;">new!</span>{% endif %}</td></tr>
+<tr><td style="text-align:right; width:50%;">Highest single-week team total ($10):</td><td>{{ pro_data.regular_season_highest_score.team }} ({{ '%.2f' % pro_data.regular_season_highest_score.points }} in week {{ pro_data.regular_season_highest_score.week }}){% if pro_data.regular_season_highest_score.week == current_week-1 %} <span style="color:#d33a1c; font-weight:bold;">new!</span>{% endif %}</td></tr>
 {% if current_week > 14 %}
 <tr><th colspan="2" style="text-align:center;"><span style="color:#009900;">Post Season Awards{% if current_week < 17 %}*{% endif %}</span></th></tr>
 {% endif %}

@@ -1,4 +1,5 @@
 from collections import OrderedDict
+import json
 
 from bs4 import BeautifulSoup
 
@@ -8,9 +9,12 @@ from gwjffl.io.jsonstore import read_json_from_file, write_json_to_file
 
 
 def parse_standings(html):
+    global tooltips
     teams = []
     soup = BeautifulSoup(html)
-    # page_data = soup.find(id='page-data')  # unused for now
+    page_data = str(soup.find(id='page-data').contents[0])
+    json_value = '{%s}' % (page_data.split('{', 1)[1].rsplit('}', 1)[0],)
+    tooltips = json.loads(json_value)['tooltips']
     rows = soup.find_all('tr', class_=constants.cell_row_class)
     for row in rows:
         teams.append(extract_team_info_from_row(row))
@@ -28,7 +32,7 @@ def parse_bs4_result_set_into_team_html_notes(rs):
         if constants.text_success_class in css_classes:
             s['style'] = '%s %s' % (constants.team_notes_style_default, constants.text_success_style)
             s['title'] = constants.team_notes[(constants.text_success_style, s.string)]
-        if constants.text_error_class in css_classes:
+        if constants.text_eliminated_class in css_classes:
             s['style'] = '%s %s' % (constants.team_notes_style_default, constants.text_error_style)
             s['title'] = constants.team_notes[(constants.text_error_style, s.string)]
     return ''.join(str(s) for s in rs)
@@ -55,6 +59,8 @@ def extract_team_info_from_row(row):
     a_user_name = row.find('a', class_=constants.user_name_class)
     team.username = a_user_name.text
     team.inactive = constants.inactive_class in a_user_name['class']
+    last_sign_in_tooltip = [item for item in tooltips if a_user_name['id'] in item["ids"]][0]['contents']
+    team.last_sign_in = BeautifulSoup(last_sign_in_tooltip).find('span', class_='relative-date').string
 
     second_td_horizontal_spacer = row.find_all('td', class_=constants.horizontal_spacer_class)[1]
     td_wins = second_td_horizontal_spacer.next_sibling

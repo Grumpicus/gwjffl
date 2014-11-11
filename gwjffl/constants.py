@@ -1,7 +1,7 @@
 from collections import OrderedDict
 
 current_year = 2014
-current_week = 4
+current_week = 10
 
 # leagues
 league_definitions = [(131597, 'Pro'),
@@ -53,6 +53,7 @@ projected_class = 'projected'
 text_success_class = 'text-success'
 text_success_style = 'color:#009900;'
 text_error_class = 'text-error'
+text_eliminated_class = 'eliminated'
 text_error_style = 'color:#990000; text-decoration:line-through;'
 icon_trophy_class = 'icon-trophy'
 inactive_class = 'inactive'
