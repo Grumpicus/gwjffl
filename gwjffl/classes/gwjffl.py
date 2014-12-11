@@ -7,6 +7,7 @@ class League(object):
         self.schedule = []
         self.div_record = ''
         self.div_rank = 0
+        self.scores = []
 
 
 class Team(object):

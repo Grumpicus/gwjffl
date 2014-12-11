@@ -1,7 +1,7 @@
 from collections import OrderedDict
 
 current_year = 2014
-current_week = 10
+current_week = 15
 
 # leagues
 league_definitions = [(131597, 'Pro'),
@@ -16,12 +16,12 @@ pro_league_id = 131597
 edible_pickle_dir = '../pickles'
 edible_pickle_template = 'week{2}_{1}_{3}.html'
 
-#templates
+# templates
 templates_dir = '../templates'
 main_template = 'main.template'
 week_end_scores_template = 'week_end_scores.template'
 
-#output
+# output
 start_week_file_path = '../output/start_week%d.html'
 end_week_file_path = '../output/end_week%d.html'
 
@@ -39,7 +39,7 @@ league_week_storage_path_template = '../data_store/week%d_league%d.json'
 #fleaflicker
 fleaflicker_url = 'http://www.fleaflicker.com'
 standings_url_template = 'http://www.fleaflicker.com/nfl/league?leagueId=%s'
-scores_url_template = 'http://www.fleaflicker.com/nfl/league-schedule?leagueId=%s&week=%s'
+schedule_url_template = 'http://www.fleaflicker.com/nfl/league-schedule?leagueId=%s&week=%s'
 
 user_name_class = 'user-name'
 league_name_class = 'league-name'

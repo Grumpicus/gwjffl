@@ -9,9 +9,11 @@ from ediblepickle import checkpoint
 
 from gwjffl import constants
 from gwjffl.classes.gwjffl import League
-from gwjffl.parsers.gwjffl import extract_pro_data, parse_standings, parse_scores
+from gwjffl.parsers.gwjffl import extract_pro_data, parse_standings, parse_schedule, parse_scores
 from gwjffl.parsers.nfl import parse_nfl_html
 from gwjffl.io.jsonstore import pickle_json_to_file, unpickle_json_from_file
+
+
 
 
 
@@ -29,12 +31,12 @@ def get_league_html(league, week, html_type):
                         week,
                         league.name.replace(' ', ''))
     if html_type is constants.prev_week_label:
-        return get_html(constants.scores_url_template % (league.id, week - 1),
+        return get_html(constants.schedule_url_template % (league.id, week - 1),
                         constants.results_label,
                         week,
                         league.name.replace(' ', ''))
     if html_type is constants.cur_week_label:
-        return get_html(constants.scores_url_template % (league.id, week),
+        return get_html(constants.schedule_url_template % (league.id, week),
                         constants.schedule_label,
                         week,
                         league.name.replace(' ', ''))
@@ -53,13 +55,15 @@ def parse_league_html(league, week):
     league = add_prev_week_rankings(league, week)
 
     if constants.current_week > 1:
-        league.results = parse_scores(get_league_html(league, week, constants.prev_week_label))
+        league.results = parse_schedule(get_league_html(league, week, constants.prev_week_label))
         for game in league.results:
             game.highest_rank = min(league.teams[game.team1_id].prev_rank, league.teams[game.team2_id].prev_rank)
         league.results.sort(key=lambda g: g.highest_rank)
 
+        league.scores = parse_scores(get_league_html(league, week, constants.prev_week_label))
+
     if constants.current_week < 17:
-        league.schedule = parse_scores(get_league_html(league, week, constants.cur_week_label))
+        league.schedule = parse_schedule(get_league_html(league, week, constants.cur_week_label))
         for game in league.schedule:
             game.highest_rank = min(league.teams[game.team1_id].rank, league.teams[game.team2_id].rank)
         league.schedule.sort(key=lambda g: g.highest_rank)

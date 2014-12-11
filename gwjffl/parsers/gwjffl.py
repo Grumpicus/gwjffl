@@ -85,13 +85,30 @@ def extract_team_info_from_row(row):
     return team
 
 
+def parse_schedule(html):
+    soup = BeautifulSoup(html)
+    games = []
+    for i in range(1, 7):
+        game = get_game_info(i, soup)
+        if game is not None:
+            games.append(game)
+    return games
+
+
 def parse_scores(html):
     soup = BeautifulSoup(html)
     scores = []
-    for i in range(1, 7):
-        score = get_game_info(i, soup)
-        if score is not None:
-            scores.append(score)
+
+    top_scores_description_list = soup.find(id='left-container').find('dl', class_='panel-body')
+
+    tsdl = top_scores_description_list.children
+
+    for dt, dd in zip(tsdl, tsdl):
+        a = dt.find('a')
+        team_id = int(extract_team_id(a))
+        score = float(dd.string)
+        scores.append((team_id, score))
+
     return scores
 
 
@@ -105,12 +122,17 @@ def get_game_info(game_number, soup):
         return None
 
 
+def extract_team_id(a):
+    start = a['href'].find(constants.team_id_param) + len(constants.team_id_param)
+    end = a['href'].find('&', start)
+    team_id = int(a['href'][start:None if end == -1 else end])
+    return team_id
+
+
 def get_team_info(row):
     # print(row)
-    team_info = row.find('a')
-    start = team_info['href'].find(constants.team_id_param) + len(constants.team_id_param)
-    end = team_info['href'].find('&', start)
-    team_id = int(team_info['href'][start:None if end == -1 else end])
+    a = row.find('a')
+    team_id = extract_team_id(a)
     score = float(row.find('td', class_='right').text)
     return team_id, score
 
@@ -154,14 +176,10 @@ def extract_pro_data(pro_league, current_week):
         highest_score = 'postseason_highest_score'
     if pro_data.get(highest_score, None) is None:
         pro_data[highest_score] = {'points': 0, 'team': None, 'week': None}
-    for x in pro_league.results:
-        if x.team1_score > pro_data[highest_score]['points']:
-            pro_data[highest_score]['points'] = x.team1_score
-            pro_data[highest_score]['team'] = pro_league.teams[x.team1_id].name
-            pro_data[highest_score]['week'] = current_week - 1
-        if x.team2_score > pro_data[highest_score]['points']:
-            pro_data[highest_score]['points'] = x.team2_score
-            pro_data[highest_score]['team'] = pro_league.teams[x.team2_id].name
+    for x in pro_league.scores:
+        if x[1] > pro_data[highest_score]['points']:  # TODO: Should really be a class, not a tuple
+            pro_data[highest_score]['points'] = x[1]
+            pro_data[highest_score]['team'] = pro_league.teams[x[0]].name
             pro_data[highest_score]['week'] = current_week - 1
 
     write_json_to_file(constants.pro_data_storage_path, pro_data)
