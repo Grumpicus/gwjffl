@@ -7,8 +7,8 @@
 {% endif %}
 </th></tr>
 {% for game in leagues[league_id].schedule %}
-{% set team1 = leagues[league_id].teams[game.team1_id] %}
-{% set team2 = leagues[league_id].teams[game.team2_id] %}
+{% set team1 = leagues[league_id].teams[game.team1_result.team_id] %}
+{% set team2 = leagues[league_id].teams[game.team2_result.team_id] %}
 {% if team1.rank < team2.rank %}
 <tr><td style="width:8%;">&nbsp;</td><td style="width:40%;">#{{ team1.rank }} {{ team1.name }} ({{ team1.wins}}-{{team1.losses}})</td><td style="width:4%;"><a href="{{ game.box_link }}">vs.</a></td><td style="width:48%;">#{{ team2.rank }} {{ team2.name }} ({{ team2.wins}}-{{team2.losses}})</td></tr>
 {% else %}

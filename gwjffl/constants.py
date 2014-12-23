@@ -1,7 +1,7 @@
 from collections import OrderedDict
 
 current_year = 2014
-current_week = 15
+current_week = 17
 
 # leagues
 league_definitions = [(131597, 'Pro'),
@@ -31,6 +31,7 @@ schedule_label = 'schedule'
 results_label = 'results'
 cur_week_label = 'cur_week'
 prev_week_label = 'prev_week'
+consolation_label = 'consolation'
 
 #data_store
 pro_data_storage_path = '../data_store/pro_data.json'
@@ -40,6 +41,8 @@ league_week_storage_path_template = '../data_store/week%d_league%d.json'
 fleaflicker_url = 'http://www.fleaflicker.com'
 standings_url_template = 'http://www.fleaflicker.com/nfl/league?leagueId=%s'
 schedule_url_template = 'http://www.fleaflicker.com/nfl/league-schedule?leagueId=%s&week=%s'
+# playoffs_bracket_url_template = 'http://www.fleaflicker.com/nfl/showBracket.do?leagueId=%s&bracketIndex=0'
+consolation_bracket_url_template = 'http://www.fleaflicker.com/nfl/showBracket.do?leagueId=%s&bracketIndex=1'
 
 user_name_class = 'user-name'
 league_name_class = 'league-name'
@@ -55,7 +58,7 @@ text_success_style = 'color:#009900;'
 text_error_class = 'text-error'
 text_eliminated_class = 'eliminated'
 text_error_style = 'color:#990000; text-decoration:line-through;'
-icon_trophy_class = 'icon-trophy'
+icon_trophy_class = 'fa-trophy'
 inactive_class = 'inactive'
 
 scoreboard_ids = {

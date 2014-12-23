@@ -5,7 +5,9 @@ from bs4 import BeautifulSoup
 
 from gwjffl import constants
 from gwjffl.classes import gwjffl
+from gwjffl.classes.gwjffl import Result
 from gwjffl.io.jsonstore import read_json_from_file, write_json_to_file
+from gwjffl.io.web import get_league_html
 
 
 def parse_standings(html):
@@ -107,7 +109,7 @@ def parse_scores(html):
         a = dt.find('a')
         team_id = int(extract_team_id(a))
         score = float(dd.string)
-        scores.append((team_id, score))
+        scores.append(Result(team_id, score))
 
     return scores
 
@@ -117,7 +119,7 @@ def get_game_info(game_number, soup):
     team2_row = soup.find(id=constants.scoreboard_ids['game%d_team2_id' % game_number])
     game_link_row = soup.find(id=constants.scoreboard_ids['game%d_box_link_id' % game_number])
     if team1_row and team2_row and game_link_row:
-        return gwjffl.Game(get_team_info(team1_row), get_team_info(team2_row), get_game_link(game_link_row))
+        return gwjffl.Game(get_result(team1_row), get_result(team2_row), get_game_link(game_link_row))
     else:
         return None
 
@@ -129,16 +131,24 @@ def extract_team_id(a):
     return team_id
 
 
-def get_team_info(row):
-    # print(row)
+def get_result(row):
     a = row.find('a')
     team_id = extract_team_id(a)
     score = float(row.find('td', class_='right').text)
-    return team_id, score
+    return gwjffl.Result(team_id, score)
 
 
 def get_game_link(row):
     return '%s%s' % (constants.fleaflicker_url, row.find('a')['href'])
+
+
+def get_consolation_winner(league, week):
+    html = get_league_html(league, week, constants.consolation_label)
+    soup = BeautifulSoup(html)
+    bracket_table = soup.find('table', class_='playoff-bracket')
+    winner = bracket_table.find_all('tr')[8]
+    a = winner.find('a')
+    return a.text
 
 
 def extract_pro_data(pro_league, current_week):
@@ -147,28 +157,28 @@ def extract_pro_data(pro_league, current_week):
     # print(pro_data)
     i = 0
     max_pf = -1
-    for x in pro_league.teams:
+    for team_id in pro_league.teams:
         if current_week <= 14:
-            if pro_league.teams[x].div_rank == 1:
+            if pro_league.teams[team_id].div_rank == 1:
                 i += 1
                 division_ref = 'div%s' % i
-                pro_data[division_ref] = pro_league.teams[x].name
-            if pro_league.teams[x].rank == 1:
-                pro_data['number_one'] = pro_league.teams[x].name
-            if pro_league.teams[x].points_for > max_pf:
-                max_pf = pro_league.teams[x].points_for
+                pro_data[division_ref] = pro_league.teams[team_id].name
+            if pro_league.teams[team_id].rank == 1:
+                pro_data['number_one'] = pro_league.teams[team_id].name
+            if pro_league.teams[team_id].points_for > max_pf:
+                max_pf = pro_league.teams[team_id].points_for
                 if 'regular_season_most_points' not in pro_data:
                     pro_data['regular_season_most_points'] = {}
-                pro_data['regular_season_most_points']['team'] = pro_league.teams[x].name
-                pro_data['regular_season_most_points']['points'] = pro_league.teams[x].points_for
+                pro_data['regular_season_most_points']['team'] = pro_league.teams[team_id].name
+                pro_data['regular_season_most_points']['points'] = pro_league.teams[team_id].points_for
         elif current_week == 17:
-            if pro_league.teams[x].rank == 1:
-                pro_data['first'] = pro_league.teams[x].name
-            if pro_league.teams[x].rank == 2:
-                pro_data['second'] = pro_league.teams[x].name
-            if pro_league.teams[x].rank == 3:
-                pro_data['third'] = pro_league.teams[x].name
-            pro_data['consolation_champ'] = 'Leap\'s Peeps'  # TODO: Parse the playoff bracket
+            if pro_league.teams[team_id].rank == 1:
+                pro_data['first'] = pro_league.teams[team_id].name
+            if pro_league.teams[team_id].rank == 2:
+                pro_data['second'] = pro_league.teams[team_id].name
+            if pro_league.teams[team_id].rank == 3:
+                pro_data['third'] = pro_league.teams[team_id].name
+            pro_data['consolation_champ'] = get_consolation_winner(pro_league, current_week)
 
     if current_week <= 14:
         highest_score = 'regular_season_highest_score'
@@ -176,10 +186,10 @@ def extract_pro_data(pro_league, current_week):
         highest_score = 'postseason_highest_score'
     if pro_data.get(highest_score, None) is None:
         pro_data[highest_score] = {'points': 0, 'team': None, 'week': None}
-    for x in pro_league.scores:
-        if x[1] > pro_data[highest_score]['points']:  # TODO: Should really be a class, not a tuple
-            pro_data[highest_score]['points'] = x[1]
-            pro_data[highest_score]['team'] = pro_league.teams[x[0]].name
+    for result in pro_league.scores:
+        if result.score > pro_data[highest_score]['points']:
+            pro_data[highest_score]['points'] = result.score
+            pro_data[highest_score]['team'] = pro_league.teams[result.team_id].name
             pro_data[highest_score]['week'] = current_week - 1
 
     write_json_to_file(constants.pro_data_storage_path, pro_data)

@@ -1,8 +1,12 @@
 <img src="http://i.imgur.com/KjKjmA7.png" style="float:left;">
+{% if current_week < 17 %}
 {% include 'nfl.template' %}
+{% else %}
+{% include 'champs.template' %}
+{% endif %}
 
 <!--break-->
-
+<link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 {% for league_id in leagues %}
 <fieldset style="background-image: linear-gradient(to right, #ffffff 0%,#f3f3f3 100%);"><legend style="font-weight: bold; font-size: 1.5em; padding: 0 10px;"><a href="http://www.fleaflicker.com/nfl/league?leagueId={{ leagues[league_id].id }}">{{ leagues[league_id].name }}</a></legend>
 {% include 'standings.template' %}

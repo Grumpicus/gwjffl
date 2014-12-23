@@ -1,0 +1,14 @@
+<div style="float:left;">
+<strong>Champs:</strong>
+<ul>
+{% for league_id in leagues %}
+{% for team_id in leagues[league_id].teams %}
+{% set team = leagues[league_id].teams[team_id] %}
+{% if team.rank == 1 %}
+<li><a href="http://www.fleaflicker.com/nfl/league?leagueId={{ leagues[league_id].id }}">{{ leagues[league_id].name }}</a>: <a href="{{ team.url }}">{{ team.name }}</a> ({{ team.username }}) <i class="fa fa-trophy" title="League Champ!" style="color:GoldenRod; cursor:help;"></i></li>
+{% endif %}
+{% endfor %}
+{% endfor %}
+</ul>
+</div>
+<div style="clear:both;"></div>
