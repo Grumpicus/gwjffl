@@ -13,11 +13,11 @@ from gwjffl.io.web import get_league_html
 def parse_standings(html):
     global tooltips
     teams = []
-    soup = BeautifulSoup(html)
+    soup = BeautifulSoup(html, 'html.parser')
     page_data = str(soup.find(id='page-data').contents[0])
     json_value = '{%s}' % (page_data.split('{', 1)[1].rsplit('}', 1)[0],)
     tooltips = json.loads(json_value)['tooltips']
-    rows = soup.find_all('tr', class_=constants.cell_row_class)
+    rows = soup.find_all('tr', id=constants.row_partial_id)
     for row in rows:
         teams.append(extract_team_info_from_row(row))
 
@@ -62,7 +62,7 @@ def extract_team_info_from_row(row):
     team.username = a_user_name.text
     team.inactive = constants.inactive_class in a_user_name['class']
     last_sign_in_tooltip = [item for item in tooltips if a_user_name['id'] in item["ids"]][0]['contents']
-    team.last_sign_in = BeautifulSoup(last_sign_in_tooltip).find('span', class_='relative-date').string
+    team.last_sign_in = BeautifulSoup(last_sign_in_tooltip, 'html.parser').find('span', class_='relative-date').string
 
     second_td_horizontal_spacer = row.find_all('td', class_=constants.horizontal_spacer_class)[1]
     td_wins = second_td_horizontal_spacer.next_sibling
@@ -88,7 +88,7 @@ def extract_team_info_from_row(row):
 
 
 def parse_schedule(html):
-    soup = BeautifulSoup(html)
+    soup = BeautifulSoup(html, 'html.parser')
     games = []
     for i in range(1, 7):
         game = get_game_info(i, soup)
@@ -98,7 +98,7 @@ def parse_schedule(html):
 
 
 def parse_scores(html):
-    soup = BeautifulSoup(html)
+    soup = BeautifulSoup(html, 'html.parser')
     scores = []
 
     top_scores_description_list = soup.find(id='left-container').find('dl', class_='panel-body')
@@ -126,7 +126,8 @@ def get_game_info(game_number, soup):
 
 def extract_team_id(a):
     start = a['href'].find(constants.team_id_param) + len(constants.team_id_param)
-    end = a['href'].find('&', start)
+    # end = a['href'].find('&', start)
+    end = -1
     team_id = int(a['href'][start:None if end == -1 else end])
     return team_id
 
@@ -144,7 +145,7 @@ def get_game_link(row):
 
 def get_consolation_winner(league, week):
     html = get_league_html(league, week, constants.consolation_label)
-    soup = BeautifulSoup(html)
+    soup = BeautifulSoup(html, 'html.parser')
     bracket_table = soup.find('table', class_='playoff-bracket')
     winner = bracket_table.find_all('tr')[8]
     a = winner.find('a')

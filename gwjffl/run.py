@@ -1,6 +1,8 @@
-# python_version: 3.3.2
+# python_version: 3.4.3
 
 from collections import OrderedDict
+import os
+import errno
 
 from jinja2 import Environment, FileSystemLoader
 
@@ -21,6 +23,7 @@ def get_nfl_html(week):
 
 def parse_league_html(league, week):
     league.teams = parse_standings(get_league_html(league, week, constants.standings_label))
+    # if constants.current_week > 1:
     league = add_prev_week_rankings(league, week)
 
     if constants.current_week > 1:
@@ -51,10 +54,11 @@ def write_output(leagues_data, week, pro_data, nfl_data):
     f1 = open(constants.start_week_file_path % week, 'w+')
     f1.write(start_week_output)
 
-    end_week_template = env.get_template(constants.week_end_scores_template)
-    end_week_output = end_week_template.render(leagues=leagues_data)
-    f1 = open(constants.end_week_file_path % (week - 1), 'w+')
-    f1.write(end_week_output)
+    if constants.current_week > 1:
+        end_week_template = env.get_template(constants.week_end_scores_template)
+        end_week_output = end_week_template.render(leagues=leagues_data)
+        f1 = open(constants.end_week_file_path % (week - 1), 'w+')
+        f1.write(end_week_output)
 
 
 def add_prev_week_rankings(league, current_week):
@@ -68,10 +72,26 @@ def add_prev_week_rankings(league, current_week):
     return league
 
 
+def make_sure_path_exists(path):
+    try:
+        os.makedirs(path)
+    except OSError as exception:
+        if exception.errno != errno.EEXIST:
+            raise
+
+
+def init():
+    os.makedirs(constants.data_store_dir, exist_ok=True)
+    os.makedirs(constants.edible_pickle_dir, exist_ok=True)
+    os.makedirs(constants.output_dir, exist_ok=True)
+
+
 def main():
     if constants.current_week < 0 or constants.current_week > 17:
         print('ERROR: Invalid current week: %d' % constants.current_week)
         return
+
+    init()
 
     leagues = OrderedDict()
     for x in constants.league_definitions:
@@ -81,7 +101,7 @@ def main():
 
     pro_league_data = extract_pro_data(leagues[constants.pro_league_id], constants.current_week)
 
-    if constants.current_week < 17:
+    if 0 < constants.current_week < 17:
         nfl_week_data = parse_nfl_html(get_nfl_html(constants.current_week))
     else:
         nfl_week_data = {}

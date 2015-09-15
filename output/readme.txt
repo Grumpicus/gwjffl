@@ -1,1 +1,0 @@
-The output from scrapeff.py goes here. Output files are ignored.

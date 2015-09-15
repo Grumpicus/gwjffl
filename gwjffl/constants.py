@@ -1,7 +1,8 @@
 from collections import OrderedDict
+import re
 
-current_year = 2014
-current_week = 17
+current_year = 2015
+current_week = 2
 
 # leagues
 league_definitions = [(131597, 'Pro'),
@@ -22,8 +23,9 @@ main_template = 'main.template'
 week_end_scores_template = 'week_end_scores.template'
 
 # output
-start_week_file_path = '../output/start_week%d.html'
-end_week_file_path = '../output/end_week%d.html'
+output_dir = '../output'
+start_week_file_path = output_dir + '/start_week%d.html'
+end_week_file_path = output_dir + '/end_week%d.html'
 
 #misc
 standings_label = 'standings'
@@ -34,8 +36,9 @@ prev_week_label = 'prev_week'
 consolation_label = 'consolation'
 
 #data_store
-pro_data_storage_path = '../data_store/pro_data.json'
-league_week_storage_path_template = '../data_store/week%d_league%d.json'
+data_store_dir = '../data_store'
+pro_data_storage_path = data_store_dir + '/pro_data.json'
+league_week_storage_path_template = data_store_dir + '/week%d_league%d.json'
 
 #fleaflicker
 fleaflicker_url = 'http://www.fleaflicker.com'
@@ -47,10 +50,11 @@ consolation_bracket_url_template = 'http://www.fleaflicker.com/nfl/showBracket.d
 user_name_class = 'user-name'
 league_name_class = 'league-name'
 tt_content_class = 'tt-content'
-team_id_param = 'teamId='
+team_id_param = '/teams/'
 horizontal_spacer_class = 'horizontal-spacer'
 vertical_spacer_class = 'vertical-spacer'
-cell_row_class = 'cell-row'
+# cell_row_class = 'cell-row'
+row_partial_id = re.compile("^row_")
 scoreboard_class = 'scoreboard'
 projected_class = 'projected'
 text_success_class = 'text-success'

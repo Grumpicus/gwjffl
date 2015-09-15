@@ -1,1 +1,0 @@
-See https://pypi.python.org/pypi/ediblepickle/ for more information
