@@ -62,7 +62,7 @@ def extract_team_info_from_row(row):
     team.username = a_user_name.text
     team.inactive = constants.inactive_class in a_user_name['class']
     last_sign_in_tooltip = [item for item in tooltips if a_user_name['id'] in item["ids"]][0]['contents']
-    team.last_sign_in = BeautifulSoup(last_sign_in_tooltip, 'html.parser').find('span', class_='relative-date').string
+    team.last_sign_in = BeautifulSoup(last_sign_in_tooltip, 'html.parser').find('span', class_='relative-date').text
 
     second_td_horizontal_spacer = row.find_all('td', class_=constants.horizontal_spacer_class)[1]
     td_wins = second_td_horizontal_spacer.next_sibling
@@ -103,9 +103,9 @@ def parse_scores(html):
 
     top_scores_description_list = soup.find(id='left-container').find('dl', class_='panel-body')
 
-    tsdl = top_scores_description_list.children
+    top_scores = top_scores_description_list.children
 
-    for dt, dd in zip(tsdl, tsdl):
+    for dt, dd in zip(top_scores, top_scores):
         a = dt.find('a')
         team_id = int(extract_team_id(a))
         score = float(dd.string)

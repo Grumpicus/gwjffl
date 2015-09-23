@@ -2,7 +2,7 @@ from collections import OrderedDict
 import re
 
 current_year = 2015
-current_week = 2
+current_week = 3
 
 # leagues
 league_definitions = [(131597, 'Pro'),
@@ -27,7 +27,7 @@ output_dir = '../output'
 start_week_file_path = output_dir + '/start_week%d.html'
 end_week_file_path = output_dir + '/end_week%d.html'
 
-#misc
+# misc
 standings_label = 'standings'
 schedule_label = 'schedule'
 results_label = 'results'
