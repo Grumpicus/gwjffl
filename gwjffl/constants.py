@@ -2,7 +2,7 @@ from collections import OrderedDict
 import re
 
 current_year = 2015
-current_week = 3
+current_week = 17
 
 # leagues
 league_definitions = [(131597, 'Pro'),
@@ -35,17 +35,17 @@ cur_week_label = 'cur_week'
 prev_week_label = 'prev_week'
 consolation_label = 'consolation'
 
-#data_store
+# data_store
 data_store_dir = '../data_store'
 pro_data_storage_path = data_store_dir + '/pro_data.json'
 league_week_storage_path_template = data_store_dir + '/week%d_league%d.json'
 
 #fleaflicker
 fleaflicker_url = 'http://www.fleaflicker.com'
-standings_url_template = 'http://www.fleaflicker.com/nfl/league?leagueId=%s'
-schedule_url_template = 'http://www.fleaflicker.com/nfl/league-schedule?leagueId=%s&week=%s'
-# playoffs_bracket_url_template = 'http://www.fleaflicker.com/nfl/showBracket.do?leagueId=%s&bracketIndex=0'
-consolation_bracket_url_template = 'http://www.fleaflicker.com/nfl/showBracket.do?leagueId=%s&bracketIndex=1'
+standings_url_template = 'http://www.fleaflicker.com/nfl/leagues/%s'
+schedule_url_template = 'http://www.fleaflicker.com/nfl/leagues/%s/scores?week=%s'
+# playoffs_bracket_url_template = 'http://www.fleaflicker.com/nfl/leagues/%s/playoffs'
+consolation_bracket_url_template = 'http://www.fleaflicker.com/nfl/leagues/%s/playoffs?bracketIndex=1'
 
 user_name_class = 'user-name'
 league_name_class = 'league-name'

@@ -1,23 +1,23 @@
 <table>
 <tr><th colspan="2" style="text-align:center;"><span style="color:#009900;">Regular Season Awards{% if current_week < 15 %}*{% endif %}</span></th></tr>
-<tr><td style="text-align:right; width:50%;">Most total points ($25):</td><td style="text-align:left;">{{ pro_data.regular_season_most_points.team }} ({{ '%.2f' % pro_data.regular_season_most_points.points }})</td></tr>
-<tr><td style="text-align:right; width:50%;">#1 Overall ($10):</td><td style="text-align:left;">{{ pro_data.number_one }}</td></tr>
-<tr><td style="text-align:right; width:50%;">Division Winner ($15):</td><td style="text-align:left;">{{ pro_data.div1 }}</td></tr>
-<tr><td style="text-align:right; width:50%;">Division Winner ($15):</td><td style="text-align:left;">{{ pro_data.div2 }}</td></tr>
-<tr><td style="text-align:right; width:50%;">Division Winner ($15):</td><td style="text-align:left;">{{ pro_data.div3 }}</td></tr>
-<tr><td style="text-align:right; width:50%;">Division Winner ($15):</td><td style="text-align:left;">{{ pro_data.div4 }}</td></tr>
-<tr><td style="text-align:right; width:50%;">Highest single-week team total ($10):</td><td style="text-align:left;">{{ pro_data.regular_season_highest_score.team }} ({{ '%.2f' % pro_data.regular_season_highest_score.points }} in week {{ pro_data.regular_season_highest_score.week }}){% if pro_data.regular_season_highest_score.week == current_week-1 %} <span style="color:#d33a1c; font-weight:bold;">new!</span>{% endif %}</td></tr>
+<tr><td style="text-align:right; width:50%;">{{ pro_data.regular_season_most_points.desc }} (${{ pro_data.regular_season_most_points.value }}):</td><td style="text-align:left;">{{ pro_data.regular_season_most_points.team.name }} ({{ '%.2f' % pro_data.regular_season_most_points.points }})</td></tr>
+<tr><td style="text-align:right; width:50%;">{{ pro_data.number_one.desc }} (${{ pro_data.number_one.value }}):</td><td style="text-align:left;">{{ pro_data.number_one.team.name }}</td></tr>
+<tr><td style="text-align:right; width:50%;">{{ pro_data.div1.desc }} (${{ pro_data.div1.value }}):</td><td style="text-align:left;">{{ pro_data.div1.team.name }}</td></tr>
+<tr><td style="text-align:right; width:50%;">{{ pro_data.div2.desc }} (${{ pro_data.div2.value }}):</td><td style="text-align:left;">{{ pro_data.div2.team.name }}</td></tr>
+<tr><td style="text-align:right; width:50%;">{{ pro_data.div3.desc }} (${{ pro_data.div3.value }}):</td><td style="text-align:left;">{{ pro_data.div3.team.name }}</td></tr>
+<tr><td style="text-align:right; width:50%;">{{ pro_data.div4.desc }} (${{ pro_data.div4.value }}):</td><td style="text-align:left;">{{ pro_data.div4.team.name }}</td></tr>
+<tr><td style="text-align:right; width:50%;">{{ pro_data.regular_season_highest_score.desc }} (${{ pro_data.regular_season_highest_score.value }}):</td><td style="text-align:left;">{{ pro_data.regular_season_highest_score.team.name }} ({{ '%.2f' % pro_data.regular_season_highest_score.points }} in week {{ pro_data.regular_season_highest_score.week }}){% if pro_data.regular_season_highest_score.week == current_week-1 %} <span style="color:#d33a1c; font-weight:bold;">new!</span>{% endif %}</td></tr>
 {% if current_week > 14 %}
 <tr><th colspan="2" style="text-align:center;"><span style="color:#009900;">Post Season Awards{% if current_week < 17 %}*{% endif %}</span></th></tr>
 {% endif %}
 {% if current_week == 17 %}
-<tr><td style="text-align:right; width:50%;">1st place ($100):</td><td style="text-align:left;">{{ pro_data.first }}</td></tr>
-<tr><td style="text-align:right; width:50%;">2nd place ($50):</td><td style="text-align:left;">{{ pro_data.second }}</td></tr>
-<tr><td style="text-align:right; width:50%;">3rd place ($25):</td><td style="text-align:left;">{{ pro_data.third }}</td></tr>
-<tr><td style="text-align:right; width:50%;">Consolation Champ ($15):</td><td style="text-align:left;">{{ pro_data.consolation_champ }}</td></tr>
+<tr><td style="text-align:right; width:50%;">{{ pro_data.first.desc }} (${{ pro_data.first.value }}):</td><td style="text-align:left;">{{ pro_data.first.team.name }}</td></tr>
+<tr><td style="text-align:right; width:50%;">{{ pro_data.second.desc }} (${{ pro_data.second.value }}):</td><td style="text-align:left;">{{ pro_data.second.team.name }}</td></tr>
+<tr><td style="text-align:right; width:50%;">{{ pro_data.third.desc }} (${{ pro_data.third.value }}):</td><td style="text-align:left;">{{ pro_data.third.team.name }}</td></tr>
+<tr><td style="text-align:right; width:50%;">{{ pro_data.consolation_champ.desc }} (${{ pro_data.consolation_champ.value }}):</td><td style="text-align:left;">{{ pro_data.consolation_champ.team.name }}</td></tr>
 {% endif %}
 {% if current_week > 14 %}
-<tr><td style="text-align:right; width:50%;">Highest single-week team total ($5):</td><td style="text-align:left;">{{ pro_data.postseason_highest_score.team }} ({{ '%.2f' % pro_data.postseason_highest_score.points }} in week {{ pro_data.postseason_highest_score.week }}){% if pro_data.postseason_highest_score.week == current_week %} <span style="color:#d33a1c; font-weight:bold;">new!</span>{% endif %}</td></tr>
+<tr><td style="text-align:right; width:50%;">{{ pro_data.postseason_highest_score.desc }} (${{ pro_data.postseason_highest_score.value }}):</td><td style="text-align:left;">{{ pro_data.postseason_highest_score.team.name }} ({{ '%.2f' % pro_data.postseason_highest_score.points }} in week {{ pro_data.postseason_highest_score.week }}){% if pro_data.postseason_highest_score.week == current_week-1 %} <span style="color:#d33a1c; font-weight:bold;">new!</span>{% endif %}</td></tr>
 {% endif %}
 {% if current_week < 17 %}<tr><td colspan="2" style="text-align:left;">*Award winners are subject to change as the season progresses.</td></tr>{% endif %}
 </table>

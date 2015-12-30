@@ -15,6 +15,10 @@
 {% include 'pro.template' %}
 {% endif %}
 
+{% if league_id == 131597 and current_week == 17 %}
+{% include 'pro_totals.template' %}
+{% endif %}
+
 {% if current_week > 1 %}
 {% include 'week_start_scores.template' %}
 {% endif %}

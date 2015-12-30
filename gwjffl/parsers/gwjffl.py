@@ -6,7 +6,7 @@ from bs4 import BeautifulSoup
 from gwjffl import constants
 from gwjffl.classes import gwjffl
 from gwjffl.classes.gwjffl import Result
-from gwjffl.io.jsonstore import read_json_from_file, write_json_to_file
+from gwjffl.io.jsonstore import pickle_json_to_file, unpickle_json_from_file
 from gwjffl.io.web import get_league_html
 
 
@@ -149,11 +149,12 @@ def get_consolation_winner(league, week):
     bracket_table = soup.find('table', class_='playoff-bracket')
     winner = bracket_table.find_all('tr')[8]
     a = winner.find('a')
-    return a.text
+    team_id = extract_team_id(a)
+    return league.teams[team_id]
 
 
 def extract_pro_data(pro_league, current_week):
-    pro_data = read_json_from_file(constants.pro_data_storage_path)
+    pro_data = unpickle_json_from_file(constants.pro_data_storage_path)
     pro_data = pro_data if pro_data is not None else {}
     # print(pro_data)
     i = 0
@@ -163,35 +164,61 @@ def extract_pro_data(pro_league, current_week):
             if pro_league.teams[team_id].div_rank == 1:
                 i += 1
                 division_ref = 'div%s' % i
-                pro_data[division_ref] = pro_league.teams[team_id].name
+                award = gwjffl.Award('Division Winner')  # TODO: constant
+                award.value = 15  # TODO: externalize
+                award.team = pro_league.teams[team_id]
+                pro_data[division_ref] = award
             if pro_league.teams[team_id].rank == 1:
-                pro_data['number_one'] = pro_league.teams[team_id].name
+                award = gwjffl.Award('#1 Overall')  # TODO: constant
+                award.value = 10  # TODO: externalize
+                award.team = pro_league.teams[team_id]
+                pro_data['number_one'] = award
             if pro_league.teams[team_id].points_for > max_pf:
                 max_pf = pro_league.teams[team_id].points_for
                 if 'regular_season_most_points' not in pro_data:
                     pro_data['regular_season_most_points'] = {}
-                pro_data['regular_season_most_points']['team'] = pro_league.teams[team_id].name
-                pro_data['regular_season_most_points']['points'] = pro_league.teams[team_id].points_for
+                award = gwjffl.Award('Most total points')  # TODO: constant
+                award.value = 25  # TODO: externalize
+                award.team = pro_league.teams[team_id]
+                award.points = pro_league.teams[team_id].points_for
+                pro_data['regular_season_most_points'] = award
         elif current_week == 17:
             if pro_league.teams[team_id].rank == 1:
-                pro_data['first'] = pro_league.teams[team_id].name
+                award = gwjffl.Award('1st place')  # TODO: constant
+                award.value = 100  # TODO: externalize
+                award.team = pro_league.teams[team_id]
+                pro_data['first'] = award
             if pro_league.teams[team_id].rank == 2:
-                pro_data['second'] = pro_league.teams[team_id].name
+                award = gwjffl.Award('2nd place')  # TODO: constant
+                award.value = 50  # TODO: externalize
+                award.team = pro_league.teams[team_id]
+                pro_data['second'] = award
             if pro_league.teams[team_id].rank == 3:
-                pro_data['third'] = pro_league.teams[team_id].name
-            pro_data['consolation_champ'] = get_consolation_winner(pro_league, current_week)
+                award = gwjffl.Award('3rd place')  # TODO: constant
+                award.value = 25  # TODO: externalize
+                award.team = pro_league.teams[team_id]
+                pro_data['third'] = award
 
+    if current_week == 17:
+        award = gwjffl.Award('Consolation Champ')  # TODO: constant
+        award.value = 15  # TODO: externalize
+        award.team = get_consolation_winner(pro_league, current_week)
+        pro_data['consolation_champ'] = award
+
+    award = gwjffl.Award('Highest single-week team total')
     if current_week <= 14:
-        highest_score = 'regular_season_highest_score'
+        highest_score = 'regular_season_highest_score'  # TODO: constant
+        award.value = 10  # TODO: externalize
     else:
-        highest_score = 'postseason_highest_score'
+        highest_score = 'postseason_highest_score'  # TODO: constant
+        award.value = 5  # TODO: externalize
     if pro_data.get(highest_score, None) is None:
-        pro_data[highest_score] = {'points': 0, 'team': None, 'week': None}
+        pro_data[highest_score] = award
     for result in pro_league.scores:
-        if result.score > pro_data[highest_score]['points']:
-            pro_data[highest_score]['points'] = result.score
-            pro_data[highest_score]['team'] = pro_league.teams[result.team_id].name
-            pro_data[highest_score]['week'] = current_week - 1
+        if result.score > pro_data[highest_score].points:
+            pro_data[highest_score].points = result.score
+            pro_data[highest_score].team = pro_league.teams[result.team_id]
+            pro_data[highest_score].week = current_week - 1
 
-    write_json_to_file(constants.pro_data_storage_path, pro_data)
+    pickle_json_to_file(constants.pro_data_storage_path, pro_data)
     return pro_data

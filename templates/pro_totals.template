@@ -1,0 +1,10 @@
+{% set teams = [] %}
+{% for team, awards in pro_data.values()|groupby('team.name') %}
+{% do teams.append({'name':team,'total':awards|sum(attribute='value')}) %}
+{% endfor %}
+<table>
+<tr><th colspan="2" style="text-align:center;"><span style="color:#009900;">Final Award Totals:</span></th></tr>
+{% for team in teams|sort(attribute='total',reverse=True) %}
+<tr><td style="text-align:right; width:50%;">{{ team.name }}:</td><td style="text-align:left;">${{ team.total }}</td></tr>
+{% endfor %}
+</table>

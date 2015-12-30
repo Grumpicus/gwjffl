@@ -42,3 +42,12 @@ class Result(object):
     def __init__(self, team_id, score):
         self.team_id = team_id
         self.score = score
+
+
+class Award(object):
+    def __init__(self, award_desc):
+        self.desc = award_desc
+        self.value = 0
+        self.team = None
+        self.week = None
+        self.points = 0

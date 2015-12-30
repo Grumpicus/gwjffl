@@ -47,6 +47,7 @@ def parse_league_html(league, week):
 
 def write_output(leagues_data, week, pro_data, nfl_data):
     env = Environment(loader=FileSystemLoader(constants.templates_dir), trim_blocks=True)
+    env.add_extension('jinja2.ext.do')
 
     start_week_template = env.get_template(constants.main_template)
     start_week_output = start_week_template.render(leagues=leagues_data, current_week=week, pro_data=pro_data,

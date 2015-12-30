@@ -7,7 +7,9 @@ from gwjffl import constants
 
 
 
+
 # noinspection PyUnusedLocal
+# https://pypi.python.org/pypi/ediblepickle
 @checkpoint(key=Template(constants.edible_pickle_template), work_dir=constants.edible_pickle_dir)
 def get_html(url, url_type, week, league_label):
     html = urlopen(url).read()
