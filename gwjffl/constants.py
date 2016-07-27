@@ -1,8 +1,8 @@
 from collections import OrderedDict
 import re
 
-current_year = 2015
-current_week = 17
+current_year = 2016
+current_week = 0
 
 # leagues
 league_definitions = [(131597, 'Pro'),
