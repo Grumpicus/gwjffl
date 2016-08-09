@@ -28,6 +28,7 @@ class Team(object):
         self.trophy = False
         self.inactive = False
         self.last_sign_in = ''
+        self.roster = []
 
 
 class Game(object):
@@ -51,3 +52,17 @@ class Award(object):
         self.team = None
         self.week = None
         self.points = 0
+
+
+class Player(object):
+    def __init__(self):
+        self.id = ''
+        self.name = ''
+        self.position = ''
+        self.team = ''
+        self.season_avg = 0
+        self.season_total = 0
+        self.acquired_how = ''
+        self.acquired_when_year = 0
+        self.acquired_when_text = ''
+        self.acquired = ''

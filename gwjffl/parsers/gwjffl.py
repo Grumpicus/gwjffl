@@ -5,7 +5,6 @@ from bs4 import BeautifulSoup
 
 from gwjffl import constants
 from gwjffl.classes import gwjffl
-from gwjffl.classes.gwjffl import Result
 from gwjffl.io.jsonstore import pickle_json_to_file, unpickle_json_from_file
 from gwjffl.io.web import get_league_html
 
@@ -53,7 +52,8 @@ def extract_team_info_from_row(row):
     team.name = a_team_info.text
     team.url = '%s%s' % (constants.fleaflicker_url, a_team_info['href'])
     start = team.url.find(constants.team_id_param) + len(constants.team_id_param)
-    team.id = int(team.url[start:])
+    end = team.url.find('?', start)
+    team.id = int(team.url[start:None if end == -1 else end])
     team.html_notes = parse_bs4_result_set_into_team_html_notes(
         div_league_name.parent.find_all('span', class_=constants.tt_content_class))
     team.trophy = div_league_name.find(class_=constants.icon_trophy_class) is not None
@@ -109,7 +109,7 @@ def parse_scores(html):
         a = dt.find('a')
         team_id = int(extract_team_id(a))
         score = float(dd.string)
-        scores.append(Result(team_id, score))
+        scores.append(gwjffl.Result(team_id, score))
 
     return scores
 
@@ -126,8 +126,7 @@ def get_game_info(game_number, soup):
 
 def extract_team_id(a):
     start = a['href'].find(constants.team_id_param) + len(constants.team_id_param)
-    # end = a['href'].find('&', start)
-    end = -1
+    end = a['href'].find('?', start)
     team_id = int(a['href'][start:None if end == -1 else end])
     return team_id
 

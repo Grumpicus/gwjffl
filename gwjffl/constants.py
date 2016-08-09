@@ -1,10 +1,10 @@
 from collections import OrderedDict
 import re
 
-current_year = 2016
-current_week = 0
+current_year = 2015
+current_week = 17
 
-# leagues
+# leagues # TODO: Convert to OrderedDict?
 league_definitions = [(131597, 'Pro'),
                       (34260, 'Division I'),
                       (33978, 'Division II'),
@@ -34,6 +34,7 @@ results_label = 'results'
 cur_week_label = 'cur_week'
 prev_week_label = 'prev_week'
 consolation_label = 'consolation'
+roster_label = 'roster'
 
 # data_store
 data_store_dir = '../data_store'
@@ -46,6 +47,7 @@ standings_url_template = 'http://www.fleaflicker.com/nfl/leagues/%s'
 schedule_url_template = 'http://www.fleaflicker.com/nfl/leagues/%s/scores?week=%s'
 # playoffs_bracket_url_template = 'http://www.fleaflicker.com/nfl/leagues/%s/playoffs'
 consolation_bracket_url_template = 'http://www.fleaflicker.com/nfl/leagues/%s/playoffs?bracketIndex=1'
+roster_url_template = 'http://www.fleaflicker.com/nfl/leagues/%s/teams/%s'
 
 user_name_class = 'user-name'
 league_name_class = 'league-name'
@@ -64,6 +66,14 @@ text_eliminated_class = 'eliminated'
 text_error_style = 'color:#990000; text-decoration:line-through;'
 icon_trophy_class = 'fa-trophy'
 inactive_class = 'inactive'
+
+player_name_class = 'player-name'
+player_id_param = '/players/'
+player_info_class = 'player-info'
+player_position_class = 'position'
+player_team_class = 'player-team'
+player_fptotal_class = 'fp-total'
+player_fp_class = 'fp'
 
 scoreboard_ids = {
     'game1_team1_id': 'row_0_0_0',

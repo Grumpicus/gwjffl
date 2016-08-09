@@ -1,3 +1,4 @@
+import re
 from string import Template
 from urllib.request import urlopen
 
@@ -37,4 +38,13 @@ def get_league_html(league, week, html_type):
                         constants.consolation_label,
                         week,
                         league.name.replace(' ', ''))
+    return None
+
+
+def get_team_html(league, week, team, html_type):
+    if html_type is constants.roster_label:
+        return get_html(constants.roster_url_template % (league.id, team.id),
+                        constants.roster_label,
+                        week,
+                        re.sub(r'[\W_]+', '', team.name))
     return None

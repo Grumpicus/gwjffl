@@ -2,7 +2,6 @@
 
 from collections import OrderedDict
 import os
-import errno
 
 from jinja2 import Environment, FileSystemLoader
 
@@ -10,6 +9,7 @@ from gwjffl import constants
 from gwjffl.classes.gwjffl import League
 from gwjffl.io.web import get_html, get_league_html
 from gwjffl.parsers.gwjffl import extract_pro_data, parse_standings, parse_schedule, parse_scores
+from gwjffl.parsers.keeper import get_keeper_prices
 from gwjffl.parsers.nfl import parse_nfl_html
 from gwjffl.io.jsonstore import pickle_json_to_file, unpickle_json_from_file
 
@@ -73,14 +73,6 @@ def add_prev_week_rankings(league, current_week):
     return league
 
 
-def make_sure_path_exists(path):
-    try:
-        os.makedirs(path)
-    except OSError as exception:
-        if exception.errno != errno.EEXIST:
-            raise
-
-
 def init():
     os.makedirs(constants.data_store_dir, exist_ok=True)
     os.makedirs(constants.edible_pickle_dir, exist_ok=True)
@@ -95,10 +87,11 @@ def main():
     init()
 
     leagues = OrderedDict()
-    for x in constants.league_definitions:
-        leagues[x[0]] = League(x[0], x[1])
-        leagues[x[0]] = parse_league_html(leagues[x[0]], constants.current_week)
-        pickle_json_to_file(constants.league_week_storage_path_template % (constants.current_week, x[0]), leagues[x[0]])
+    for league_tuple in constants.league_definitions:
+        leagues[league_tuple[0]] = League(league_tuple[0], league_tuple[1])
+        leagues[league_tuple[0]] = parse_league_html(leagues[league_tuple[0]], constants.current_week)
+        pickle_json_to_file(constants.league_week_storage_path_template % (constants.current_week, league_tuple[0]),
+                            leagues[league_tuple[0]])
 
     pro_league_data = extract_pro_data(leagues[constants.pro_league_id], constants.current_week)
 
@@ -106,6 +99,17 @@ def main():
         nfl_week_data = parse_nfl_html(get_nfl_html(constants.current_week))
     else:
         nfl_week_data = {}
+
+    if constants.current_week == 17:
+        keeper = None
+        for league_id in leagues:
+            if leagues[league_id].name == 'Keeper':
+                keeper = leagues[league_id]
+                break
+        if keeper is None:
+            print('ERROR: Keeper league not found.')
+        else:
+            get_keeper_prices(keeper)
 
     write_output(leagues, constants.current_week, pro_league_data, nfl_week_data)
 
