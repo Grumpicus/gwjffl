@@ -1,17 +1,17 @@
 # python_version: 3.4.3
 
-from collections import OrderedDict
 import os
+from collections import OrderedDict
 
 from jinja2 import Environment, FileSystemLoader
 
 from gwjffl import constants
 from gwjffl.classes.gwjffl import League
+from gwjffl.io.jsonstore import pickle_json_to_file, unpickle_json_from_file
 from gwjffl.io.web import get_html, get_league_html
 from gwjffl.parsers.gwjffl import extract_pro_data, parse_standings, parse_schedule, parse_scores
 from gwjffl.parsers.keeper import get_keeper_prices
 from gwjffl.parsers.nfl import parse_nfl_html
-from gwjffl.io.jsonstore import pickle_json_to_file, unpickle_json_from_file
 
 
 def get_nfl_html(week):
@@ -52,14 +52,25 @@ def write_output(leagues_data, week, pro_data, nfl_data):
     start_week_template = env.get_template(constants.main_template)
     start_week_output = start_week_template.render(leagues=leagues_data, current_week=week, pro_data=pro_data,
                                                    legend=constants.team_notes, nfl_data=nfl_data)
-    f1 = open(constants.start_week_file_path % week, 'w+')
-    f1.write(start_week_output)
+    with open(constants.start_week_file_path % week, 'w+') as f1:
+        f1.write(start_week_output)
 
     if constants.current_week > 1:
         end_week_template = env.get_template(constants.week_end_scores_template)
         end_week_output = end_week_template.render(leagues=leagues_data)
-        f1 = open(constants.end_week_file_path % (week - 1), 'w+')
-        f1.write(end_week_output)
+        with open(constants.end_week_file_path % (week - 1), 'w+') as f1:
+            f1.write(end_week_output)
+
+
+def write_keeper(keeper_league):
+    env = Environment(loader=FileSystemLoader(constants.templates_dir), trim_blocks=True)
+    env.add_extension('jinja2.ext.do')
+
+    keeper_template = env.get_template(constants.keeper_template)
+    keeper_output = keeper_template.render(teams=keeper_league.teams)
+
+    with open(constants.keepers_file_path, 'w+') as f1:
+        f1.write(keeper_output)
 
 
 def add_prev_week_rankings(league, current_week):
@@ -109,7 +120,8 @@ def main():
         if keeper is None:
             print('ERROR: Keeper league not found.')
         else:
-            get_keeper_prices(keeper)
+            keeper_league = get_keeper_prices(keeper)
+            write_keeper(keeper_league)
 
     write_output(leagues, constants.current_week, pro_league_data, nfl_week_data)
 

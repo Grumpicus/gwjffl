@@ -1,5 +1,5 @@
-from collections import OrderedDict
 import re
+from collections import OrderedDict
 
 current_year = 2015
 current_week = 17
@@ -21,11 +21,13 @@ edible_pickle_template = 'week{2}_{1}_{3}.html'
 templates_dir = '../templates'
 main_template = 'main.template'
 week_end_scores_template = 'week_end_scores.template'
+keeper_template = 'keeper.jinja'
 
 # output
 output_dir = '../output'
 start_week_file_path = output_dir + '/start_week%d.html'
 end_week_file_path = output_dir + '/end_week%d.html'
+keepers_file_path = output_dir + '/keepers.html'
 
 # misc
 standings_label = 'standings'

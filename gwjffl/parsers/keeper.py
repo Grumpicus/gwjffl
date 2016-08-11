@@ -8,16 +8,14 @@ from gwjffl.io.web import get_team_html
 
 
 def get_keeper_prices(keeper_league):
-    # We already have the list of teams
-    # print(keeper_league)
     # Go to each team page get the roster
     for team_id in keeper_league.teams:
-        print(team_id)
+        # print(team_id)
         team = keeper_league.teams[team_id]
         team_html = get_team_html(keeper_league, constants.current_week, team, constants.roster_label)
         roster = parse_roster_html(team_html)
-        print(roster)
         team.roster = roster
+    return keeper_league
 
 
 def parse_roster_html(html):
@@ -35,7 +33,7 @@ def parse_roster_html(html):
 
 
 def extract_player_info_from_row(row):
-    print(row)
+    # print(row)
     player = gwjffl.Player()
 
     div_player_name = row.find('div', class_=constants.player_name_class)
