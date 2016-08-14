@@ -7,6 +7,7 @@ from jinja2 import Environment, FileSystemLoader
 
 from gwjffl import constants
 from gwjffl.classes.gwjffl import League
+from gwjffl.io.googlespread import write_keeper_to_spreadsheet
 from gwjffl.io.jsonstore import pickle_json_to_file, unpickle_json_from_file
 from gwjffl.io.web import get_html, get_league_html
 from gwjffl.parsers.gwjffl import extract_pro_data, parse_standings, parse_schedule, parse_scores
@@ -71,6 +72,8 @@ def write_keeper(keeper_league):
 
     with open(constants.keepers_file_path, 'w+') as f1:
         f1.write(keeper_output)
+
+    write_keeper_to_spreadsheet(keeper_league)
 
 
 def add_prev_week_rankings(league, current_week):

@@ -1,5 +1,3 @@
-# If modifying these scopes, delete your previously saved credentials
-# at ~/.credentials/sheets.googleapis.com-python-quickstart.json
 import os
 
 import httplib2
@@ -16,8 +14,10 @@ try:
 except ImportError:
     flags = None
 
+# If modifying these scopes, delete your previously saved credentials
+# at ~/.credentials/sheets.googleapis.com-python-quickstart.json
 SCOPES = 'https://www.googleapis.com/auth/spreadsheets'
-CLIENT_SECRET_FILE = 'config/client_secret.json'
+CLIENT_SECRET_FILE = '../../config/client_secret.json'
 APPLICATION_NAME = 'Google Sheets API Python Quickstart'
 
 
@@ -52,12 +52,14 @@ def get_credentials():
 def store_keeper():
     credentials = get_credentials()
     http = credentials.authorize(httplib2.Http())
-    discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?version=v4')
-    service = discovery.build('sheets', 'v4', http=http, discoveryServiceUrl=discoveryUrl)
+    discovery_url = 'https://sheets.googleapis.com/$discovery/rest?version=v4'
+    service = discovery.build('sheets', 'v4', http=http, discoveryServiceUrl=discovery_url)
 
     # https://developers.google.com/sheets/reference/rest/v4/spreadsheets/create
-    spreadsheetId = '1Zj_EchXd3daqNeesZFC4B-OPn39SpEot0ZfwjeWaeE4'
-    new_sheet = service.spreadsheets()
+    spreadsheet_id = '1Zj_EchXd3daqNeesZFC4B-OPn39SpEot0ZfwjeWaeE4'
+
+    request = {}
+    new_sheet = service.spreadsheets().create('test')
     print(new_sheet)
     # .sheets().addSheet(spreadsheetId=spreadsheetId)
     # result = service.spreadsheets()
@@ -74,13 +76,13 @@ def main():
     """
     credentials = get_credentials()
     http = credentials.authorize(httplib2.Http())
-    discoveryUrl = ('https://sheets.googleapis.com/$discovery/rest?version=v4')
-    service = discovery.build('sheets', 'v4', http=http, discoveryServiceUrl=discoveryUrl)
+    discovery_url = 'https://sheets.googleapis.com/$discovery/rest?version=v4'
+    service = discovery.build('sheets', 'v4', http=http, discoveryServiceUrl=discovery_url)
 
-    spreadsheetId = '1Zj_EchXd3daqNeesZFC4B-OPn39SpEot0ZfwjeWaeE4'
-    # rangeName = 'Class Data!A2:E'
-    rangeName = 'Sheet1!A2:E'
-    result = service.spreadsheets().values().get(spreadsheetId=spreadsheetId, range=rangeName).execute()
+    spreadsheet_id = '1Zj_EchXd3daqNeesZFC4B-OPn39SpEot0ZfwjeWaeE4'
+    # range_name = 'Class Data!A2:E'
+    range_name = 'Sheet1!A2:E'
+    result = service.spreadsheets().values().get(spreadsheetId=spreadsheet_id, range=range_name).execute()
     values = result.get('values', [])
 
     if not values:
