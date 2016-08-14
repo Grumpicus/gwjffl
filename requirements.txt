@@ -1,4 +1,6 @@
 bs4
 ediblepickle
+google-api-python-client
 jinja2
 jsonpickle
+oauth2client
