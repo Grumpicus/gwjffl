@@ -37,6 +37,7 @@ cur_week_label = 'cur_week'
 prev_week_label = 'prev_week'
 consolation_label = 'consolation'
 roster_label = 'roster'
+transactions_label = 'transactions'
 
 # data_store
 data_store_dir = '../data_store'
@@ -50,6 +51,7 @@ schedule_url_template = 'http://www.fleaflicker.com/nfl/leagues/%s/scores?week=%
 # playoffs_bracket_url_template = 'http://www.fleaflicker.com/nfl/leagues/%s/playoffs'
 consolation_bracket_url_template = 'http://www.fleaflicker.com/nfl/leagues/%s/playoffs?bracketIndex=1'
 roster_url_template = 'http://www.fleaflicker.com/nfl/leagues/%s/teams/%s'
+transactions_url_template = 'http://www.fleaflicker.com/nfl/leagues/%s/transactions?playerId=%s'
 
 user_name_class = 'user-name'
 league_name_class = 'league-name'
@@ -76,6 +78,11 @@ player_position_class = 'position'
 player_team_class = 'player-team'
 player_fptotal_class = 'fp-total'
 player_fp_class = 'fp'
+
+# transactions
+player_inline_class = 'player-inline'
+list_group_item_text_class = 'list-group-item-text'
+relative_date_class = 'relative-date'
 
 scoreboard_ids = {
     'game1_team1_id': 'row_0_0_0',

@@ -9,8 +9,10 @@ from gwjffl import constants
 
 
 
+
 # noinspection PyUnusedLocal
 # https://pypi.python.org/pypi/ediblepickle
+# TODO: Update constants.edible_pickle_template to be less complex
 @checkpoint(key=Template(constants.edible_pickle_template), work_dir=constants.edible_pickle_dir)
 def get_html(url, url_type, week, league_label):
     html = urlopen(url).read()
@@ -46,5 +48,14 @@ def get_team_html(league, week, team, html_type):
         return get_html(constants.roster_url_template % (league.id, team.id),
                         constants.roster_label,
                         week,
-                        re.sub(r'[\W_]+', '', team.name))
+                        'Keeper_%s' % re.sub(r'[\W_]+', '', team.name))
+    return None
+
+
+def get_player_html(league, week, team, player, html_type):
+    if html_type is constants.transactions_label:
+        return get_html(constants.transactions_url_template % (league.id, player.id),
+                        constants.transactions_label,
+                        week,
+                        'Keeper_%s_%s' % (re.sub(r'[\W_]+', '', team.name), re.sub(r'[\W_]+', '', player.name)))
     return None

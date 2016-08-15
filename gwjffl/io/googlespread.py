@@ -9,22 +9,6 @@ def get_credentials():
     return ServiceAccountCredentials.from_json_keyfile_name(CLIENT_SECRET_FILE, SCOPE)
 
 
-def test():
-    credentials = get_credentials()
-    gc = gspread.authorize(credentials)
-
-    worksheet = gc.open('Keeper 2016').sheet1
-
-    # Select a range
-    cell_list = worksheet.range('A1:C7')
-
-    for cell in cell_list:
-        cell.value = 'O_o'
-
-    # Update in batch
-    worksheet.update_cells(cell_list)
-
-
 def get_col_num_from_letter(worksheet, letter):
     return worksheet.get_int_addr(letter + '1')[1]
 
@@ -48,6 +32,7 @@ def write_keeper_to_spreadsheet(keeper_league):
     final_col = get_col_num_from_letter(worksheet, 'E')
     season_total_col = get_col_num_from_letter(worksheet, 'T')
     season_avg_col = get_col_num_from_letter(worksheet, 'V')
+    transaction_count_col = get_col_num_from_letter(worksheet, 'AI')
 
     team_limit = 23
 
@@ -61,7 +46,7 @@ def write_keeper_to_spreadsheet(keeper_league):
         worksheet.update_cell(row_num, 1, team.name)
 
         sorted_roster = sorted(team.roster, key=lambda k: (convert_position_to_sort_index(k.position), k.name))
-        print(sorted_roster)
+        # print(sorted_roster)
 
         for player in sorted_roster:
             row_num += 1
@@ -76,12 +61,26 @@ def write_keeper_to_spreadsheet(keeper_league):
             cell.value = player.acquired
             cell_list.append(cell)
 
+            if player.peak_price is not None and player.peak_price != player.last_price:
+                cell = worksheet.cell(row_num, peak_col)
+                cell.value = player.peak_price
+                cell_list.append(cell)
+
+            if player.last_price is not None:
+                cell = worksheet.cell(row_num, final_col)
+                cell.value = player.last_price
+                cell_list.append(cell)
+
             cell = worksheet.cell(row_num, season_total_col)
             cell.value = player.season_total
             cell_list.append(cell)
 
             cell = worksheet.cell(row_num, season_avg_col)
             cell.value = player.season_avg
+            cell_list.append(cell)
+
+            cell = worksheet.cell(row_num, transaction_count_col)
+            cell.value = len(player.transactions)
             cell_list.append(cell)
 
             print(row_num, player.name)

@@ -1,10 +1,14 @@
 import json
+import re
+
+from datetime import datetime
 
 from bs4 import BeautifulSoup
 
 from gwjffl import constants
+
 from gwjffl.classes import gwjffl
-from gwjffl.io.web import get_team_html
+from gwjffl.io.web import get_team_html, get_player_html
 
 
 def get_keeper_prices(keeper_league):
@@ -15,6 +19,9 @@ def get_keeper_prices(keeper_league):
         team_html = get_team_html(keeper_league, constants.current_week, team, constants.roster_label)
         roster = parse_roster_html(team_html)
         team.roster = roster
+    # TODO: Figure out the optimal time and place to add transaction data
+    keeper_league = add_transaction_data(keeper_league)
+    keeper_league = calculate_player_values(keeper_league)
     return keeper_league
 
 
@@ -52,7 +59,8 @@ def extract_player_info_from_row(row):
 
     start = player.url.find(constants.player_id_param) + len(constants.player_id_param)
     end = player.url.find('?', start)
-    player.id = player.url[start:None if end == -1 else end]
+    player.SEO_id = player.url[start:None if end == -1 else end]
+    player.id = player.SEO_id[player.SEO_id.rindex('-') + 1:]
 
     div_player_info = row.find('div', class_=constants.player_info_class)
     player.position = div_player_info.find('span', class_=constants.player_position_class).text
@@ -76,3 +84,93 @@ def calculate_acquisition(player):
         else:
             acquisition = player.acquired_how
     return acquisition
+
+
+def add_transaction_data(league):
+    for team_id in league.teams:
+        # print(team_id)
+        team = league.teams[team_id]
+
+        for player in team.roster:
+            # print(player.id, player.name)
+            player_html = get_player_html(league, constants.current_week, team, player, constants.transactions_label)
+            player.transactions = parse_transactions_html(player_html)
+
+    return league
+
+
+def parse_transactions_html(html):
+    global transaction_tooltips
+    transactions = []
+    soup = BeautifulSoup(html, 'html.parser')
+    page_data = str(soup.find(id='page-data').contents[0])
+    json_value = '{%s}' % (page_data.split('{', 1)[1].rsplit('}', 1)[0],)
+    transaction_tooltips = json.loads(json_value)['tooltips']
+    container = soup.find('div', class_=constants.player_inline_class)
+
+    rows = container.find_all('div', class_=constants.list_group_item_text_class)
+    for row in rows:
+        transaction = extract_transaction_info_from_row(row)
+        if transaction.datetime.year == constants.current_year and transaction.type in ['Added', 'Claimed']:
+            transaction.amount = transaction.amount if transaction.amount else 0
+            transactions.append(transaction)
+
+    return transactions
+
+
+def convert_timezone_to_offset(time_str):
+    tz_map = {'EDT': '-0400', 'EST': '-0500'}  # These are the only ones the fleaflicker is known to use
+    tz_str = time_str[time_str.rindex(' ') + 1:]
+    return time_str.replace(tz_str, tz_map[tz_str])
+
+
+def extract_transaction_info_from_row(row):
+    # print(row)
+    transaction = gwjffl.Transaction()
+
+    span_date = row.find('span', class_=constants.relative_date_class)
+
+    transaction_tooltip = [item for item in transaction_tooltips if span_date['id'] in item["ids"]][0]['contents']
+    datetime_str = BeautifulSoup(transaction_tooltip, 'html.parser').text
+    converted_datetime_str = convert_timezone_to_offset(datetime_str)
+    transaction_when = datetime.strptime(converted_datetime_str, '%a %m/%d/%y %I:%M %p %z')
+    transaction.datetime = transaction_when
+
+    transaction.type = row.find('div', class_="player").previous_sibling.strip()
+
+    r = re.compile('\(\$\d+\)')
+    t = row.find(string=r)
+    transaction.amount = int(t.strip()[2:-1]) if t else None
+    return transaction
+
+
+def calculate_player_values(league):
+    for team_id in league.teams:
+        # print(team_id)
+        team = league.teams[team_id]
+
+        for player in team.roster:
+            # print(player.id, player.name, len(player.transactions))
+            if len(player.transactions) > 0:
+                player.peak_price = calculate_peak_amount(player.transactions)
+                # print(player.peak_price)
+                player.last_price = calculate_last_amount(player.transactions)
+                # print(player.last_price)
+
+    return league
+
+
+def calculate_last_amount(transactions):
+    sorted_by_date = sorted(transactions, key=lambda k: k.datetime, reverse=True)
+    for transaction in sorted_by_date:
+        if transaction.amount is not None:
+            return transaction.amount
+
+
+def calculate_peak_amount(transactions):
+    peak_amount = None
+    for transaction in transactions:
+        if transaction.amount is not None:
+            if peak_amount is None or transaction.amount > peak_amount:
+                peak_amount = transaction.amount
+    return peak_amount

@@ -66,3 +66,15 @@ class Player(object):
         self.acquired_when_year = 0
         self.acquired_when_text = ''
         self.acquired = ''
+        self.SEO_id = ''
+        self.transactions = []
+        self.peak_price = None
+        self.last_price = None
+
+
+class Transaction(object):
+    def __init__(self):
+        self.team = ''
+        self.datetime = None
+        self.amount = None
+        self.type = None
