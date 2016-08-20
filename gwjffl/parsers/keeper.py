@@ -55,7 +55,8 @@ def extract_player_info_from_row(row):
     acquisition_when = span_acquisition_how.next_sibling[2:]
     player.acquired_when_year = int(acquisition_when[-4:])
     player.acquired_when_text = acquisition_when[:-5]
-    player.acquired = calculate_acquisition(player)
+    acquisition = calculate_acquisition(player)
+    player.acquired = acquisition if acquisition else None
 
     start = player.url.find(constants.player_id_param) + len(constants.player_id_param)
     end = player.url.find('?', start)
@@ -79,8 +80,12 @@ def calculate_acquisition(player):
     if player.acquired_when_year < constants.current_year:
         acquisition = 'Keeper'
     else:
+        week_maybe = player.acquired_when_text[-2:].strip()
+        acquired_when_week = int(week_maybe) if week_maybe.isnumeric() else 0
         if player.acquired_how == 'Imported':
             acquisition = 'Drafted'
+        elif acquired_when_week > constants.current_week:  # Should only happen in weeks > 13
+            acquisition = 'Cut'
         else:
             acquisition = player.acquired_how
     return acquisition
@@ -151,7 +156,10 @@ def calculate_player_values(league):
 
         for player in team.roster:
             # print(player.id, player.name, len(player.transactions))
-            if len(player.transactions) > 0:
+            if player.acquired_how == 'Cut':
+                player.peak_price = 999
+                player.last_price = 999
+            elif len(player.transactions) > 0:
                 player.peak_price = calculate_peak_amount(player.transactions)
                 # print(player.peak_price)
                 player.last_price = calculate_last_amount(player.transactions)

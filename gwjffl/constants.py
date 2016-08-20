@@ -13,8 +13,12 @@ league_definitions = [(131597, 'Pro'),
 
 pro_league_id = 131597
 
+max_keepers_week = 13
+
+sub_dir = '/%d/%d' % (current_year, current_week)
+
 # edible_pickle
-edible_pickle_dir = '../pickles'
+edible_pickle_dir = '../pickles' + sub_dir
 edible_pickle_template = 'week{2}_{1}_{3}.html'
 
 # templates
@@ -24,7 +28,7 @@ week_end_scores_template = 'week_end_scores.template'
 keeper_template = 'keeper.jinja'
 
 # output
-output_dir = '../output'
+output_dir = '../output' + sub_dir
 start_week_file_path = output_dir + '/start_week%d.html'
 end_week_file_path = output_dir + '/end_week%d.html'
 keepers_file_path = output_dir + '/keepers.html'
@@ -50,7 +54,7 @@ standings_url_template = 'http://www.fleaflicker.com/nfl/leagues/%s'
 schedule_url_template = 'http://www.fleaflicker.com/nfl/leagues/%s/scores?week=%s'
 # playoffs_bracket_url_template = 'http://www.fleaflicker.com/nfl/leagues/%s/playoffs'
 consolation_bracket_url_template = 'http://www.fleaflicker.com/nfl/leagues/%s/playoffs?bracketIndex=1'
-roster_url_template = 'http://www.fleaflicker.com/nfl/leagues/%s/teams/%s'
+roster_url_template = 'http://www.fleaflicker.com/nfl/leagues/%s/teams/%s?season=%d&week=%d'  # http://www.fleaflicker.com/nfl/leagues/92221/teams/648518?season=2015&week=14
 transactions_url_template = 'http://www.fleaflicker.com/nfl/leagues/%s/transactions?playerId=%s'
 
 user_name_class = 'user-name'

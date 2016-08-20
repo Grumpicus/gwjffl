@@ -10,6 +10,7 @@ from gwjffl import constants
 
 
 
+
 # noinspection PyUnusedLocal
 # https://pypi.python.org/pypi/ediblepickle
 # TODO: Update constants.edible_pickle_template to be less complex
@@ -45,7 +46,9 @@ def get_league_html(league, week, html_type):
 
 def get_team_html(league, week, team, html_type):
     if html_type is constants.roster_label:
-        return get_html(constants.roster_url_template % (league.id, team.id),
+        roster_week = min(week,
+                          constants.max_keepers_week)  # TODO: This is business logic that belongs elsewhere. Refactor.
+        return get_html(constants.roster_url_template % (league.id, team.id, constants.current_year, roster_week),
                         constants.roster_label,
                         week,
                         'Keeper_%s' % re.sub(r'[\W_]+', '', team.name))

@@ -58,8 +58,8 @@ class Player(object):
     def __init__(self):
         self.id = ''
         self.name = ''
-        self.position = ''
-        self.team = ''
+        self.position = ''  # unused
+        self.team = ''  # unused
         self.season_avg = 0
         self.season_total = 0
         self.acquired_how = ''
@@ -70,6 +70,7 @@ class Player(object):
         self.transactions = []
         self.peak_price = None
         self.last_price = None
+        self.url = ''
 
 
 class Transaction(object):

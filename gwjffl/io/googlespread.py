@@ -32,7 +32,7 @@ def write_keeper_to_spreadsheet(keeper_league):
     final_col = get_col_num_from_letter(worksheet, 'E')
     season_total_col = get_col_num_from_letter(worksheet, 'T')
     season_avg_col = get_col_num_from_letter(worksheet, 'V')
-    transaction_count_col = get_col_num_from_letter(worksheet, 'AI')
+    player_url_col = get_col_num_from_letter(worksheet, 'AI')
 
     team_limit = 23
 
@@ -61,15 +61,26 @@ def write_keeper_to_spreadsheet(keeper_league):
             cell.value = player.acquired
             cell_list.append(cell)
 
+            cell = worksheet.cell(row_num, peak_col)
             if player.peak_price is not None and player.peak_price != player.last_price:
-                cell = worksheet.cell(row_num, peak_col)
                 cell.value = player.peak_price
-                cell_list.append(cell)
+            else:
+                cell.value = ''
+            cell_list.append(cell)
 
+            default_peak_value = '=if(' \
+                                 'and(' \
+                                 'A{0}<>"",A{1}<>"",' \
+                                 'C{0}<>"Keeper",C{0}<>"Drafted",C{0}<>"Cut",C{0}<>"Traded For"' \
+                                 '),' \
+                                 '-1,"")'.format(row_num, row_num - 1)
+
+            cell = worksheet.cell(row_num, final_col)
             if player.last_price is not None:
-                cell = worksheet.cell(row_num, final_col)
                 cell.value = player.last_price
-                cell_list.append(cell)
+            else:
+                cell.value = default_peak_value
+            cell_list.append(cell)
 
             cell = worksheet.cell(row_num, season_total_col)
             cell.value = player.season_total
@@ -79,8 +90,8 @@ def write_keeper_to_spreadsheet(keeper_league):
             cell.value = player.season_avg
             cell_list.append(cell)
 
-            cell = worksheet.cell(row_num, transaction_count_col)
-            cell.value = len(player.transactions)
+            cell = worksheet.cell(row_num, player_url_col)
+            cell.value = player.url
             cell_list.append(cell)
 
             print(row_num, player.name)
