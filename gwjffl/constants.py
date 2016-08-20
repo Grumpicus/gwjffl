@@ -13,7 +13,9 @@ league_definitions = [(131597, 'Pro'),
 
 pro_league_id = 131597
 
+# keepers
 max_keepers_week = 13
+ineligible_label = 'Ineligible'
 
 sub_dir = '/%d/%d' % (current_year, current_week)
 
@@ -50,10 +52,10 @@ league_week_storage_path_template = data_store_dir + '/week%d_league%d.json'
 
 #fleaflicker
 fleaflicker_url = 'http://www.fleaflicker.com'
-standings_url_template = 'http://www.fleaflicker.com/nfl/leagues/%s'
-schedule_url_template = 'http://www.fleaflicker.com/nfl/leagues/%s/scores?week=%s'
+standings_url_template = 'http://www.fleaflicker.com/nfl/leagues/%s?season=%s'
+schedule_url_template = 'http://www.fleaflicker.com/nfl/leagues/%s/scores?week=%s&season=%s'
 # playoffs_bracket_url_template = 'http://www.fleaflicker.com/nfl/leagues/%s/playoffs'
-consolation_bracket_url_template = 'http://www.fleaflicker.com/nfl/leagues/%s/playoffs?bracketIndex=1'
+consolation_bracket_url_template = 'http://www.fleaflicker.com/nfl/leagues/%s/playoffs?bracketIndex=1&season=%s'
 roster_url_template = 'http://www.fleaflicker.com/nfl/leagues/%s/teams/%s?season=%d&week=%d'  # http://www.fleaflicker.com/nfl/leagues/92221/teams/648518?season=2015&week=14
 transactions_url_template = 'http://www.fleaflicker.com/nfl/leagues/%s/transactions?playerId=%s'
 

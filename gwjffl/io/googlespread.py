@@ -2,7 +2,7 @@ import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
 SCOPE = ['https://spreadsheets.google.com/feeds']
-CLIENT_SECRET_FILE = '../config/gwjffl-c0beb3fdd230.json'
+CLIENT_SECRET_FILE = '../config/gwjffl-secret.json'
 
 
 def get_credentials():
@@ -58,7 +58,7 @@ def write_keeper_to_spreadsheet(keeper_league):
             cell_list.append(cell)
 
             cell = worksheet.cell(row_num, acquired_col)
-            cell.value = player.acquired
+            cell.value = player.keeper_status
             cell_list.append(cell)
 
             cell = worksheet.cell(row_num, peak_col)
@@ -68,7 +68,7 @@ def write_keeper_to_spreadsheet(keeper_league):
                 cell.value = ''
             cell_list.append(cell)
 
-            default_peak_value = '=if(' \
+            default_cell_value = '=if(' \
                                  'and(' \
                                  'A{0}<>"",A{1}<>"",' \
                                  'C{0}<>"Keeper",C{0}<>"Drafted",C{0}<>"Cut",C{0}<>"Traded For"' \
@@ -79,7 +79,7 @@ def write_keeper_to_spreadsheet(keeper_league):
             if player.last_price is not None:
                 cell.value = player.last_price
             else:
-                cell.value = default_peak_value
+                cell.value = default_cell_value
             cell_list.append(cell)
 
             cell = worksheet.cell(row_num, season_total_col)
@@ -94,7 +94,7 @@ def write_keeper_to_spreadsheet(keeper_league):
             cell.value = player.url
             cell_list.append(cell)
 
-            print(row_num, player.name)
+            print(row_num, player.name, player.keeper_status, player.peak_price, player.last_price, player.url)
             worksheet.update_cells(cell_list)
 
         while team_count % team_limit > 0:

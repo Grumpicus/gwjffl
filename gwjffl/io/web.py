@@ -7,10 +7,6 @@ from ediblepickle import checkpoint
 from gwjffl import constants
 
 
-
-
-
-
 # noinspection PyUnusedLocal
 # https://pypi.python.org/pypi/ediblepickle
 # TODO: Update constants.edible_pickle_template to be less complex
@@ -22,22 +18,22 @@ def get_html(url, url_type, week, league_label):
 
 def get_league_html(league, week, html_type):
     if html_type is constants.standings_label:
-        return get_html(constants.standings_url_template % league.id,
+        return get_html(constants.standings_url_template % (league.id, constants.current_year),
                         constants.standings_label,
                         week,
                         league.name.replace(' ', ''))
     if html_type is constants.prev_week_label:
-        return get_html(constants.schedule_url_template % (league.id, week - 1),
+        return get_html(constants.schedule_url_template % (league.id, week - 1, constants.current_year),
                         constants.results_label,
                         week,
                         league.name.replace(' ', ''))
     if html_type is constants.cur_week_label:
-        return get_html(constants.schedule_url_template % (league.id, week),
+        return get_html(constants.schedule_url_template % (league.id, week, constants.current_year),
                         constants.schedule_label,
                         week,
                         league.name.replace(' ', ''))
     if html_type is constants.consolation_label:
-        return get_html(constants.consolation_bracket_url_template % league.id,
+        return get_html(constants.consolation_bracket_url_template % (league.id, constants.current_year),
                         constants.consolation_label,
                         week,
                         league.name.replace(' ', ''))
@@ -46,9 +42,8 @@ def get_league_html(league, week, html_type):
 
 def get_team_html(league, week, team, html_type):
     if html_type is constants.roster_label:
-        roster_week = min(week,
-                          constants.max_keepers_week)  # TODO: This is business logic that belongs elsewhere. Refactor.
-        return get_html(constants.roster_url_template % (league.id, team.id, constants.current_year, roster_week),
+        return get_html(constants.roster_url_template %
+                        (league.id, team.id, constants.current_year, max(16, constants.current_week)),
                         constants.roster_label,
                         week,
                         'Keeper_%s' % re.sub(r'[\W_]+', '', team.name))

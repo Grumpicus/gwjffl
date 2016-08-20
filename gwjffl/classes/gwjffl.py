@@ -65,7 +65,7 @@ class Player(object):
         self.acquired_how = ''
         self.acquired_when_year = 0
         self.acquired_when_text = ''
-        self.acquired = ''
+        self.keeper_status = ''
         self.SEO_id = ''
         self.transactions = []
         self.peak_price = None

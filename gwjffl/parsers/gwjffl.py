@@ -1,5 +1,5 @@
-from collections import OrderedDict
 import json
+from collections import OrderedDict
 
 from bs4 import BeautifulSoup
 
@@ -59,10 +59,13 @@ def extract_team_info_from_row(row):
     team.trophy = div_league_name.find(class_=constants.icon_trophy_class) is not None
 
     a_user_name = row.find('a', class_=constants.user_name_class)
-    team.username = a_user_name.text
+    if a_user_name is None:
+        a_user_name = row.find('a', string="Take Over")
+    team.username = a_user_name.text if a_user_name else 'ERROR'
     team.inactive = constants.inactive_class in a_user_name['class']
-    last_sign_in_tooltip = [item for item in tooltips if a_user_name['id'] in item["ids"]][0]['contents']
-    team.last_sign_in = BeautifulSoup(last_sign_in_tooltip, 'html.parser').find('span', class_='relative-date').text
+    if 'id' in a_user_name:
+        last_sign_in_tooltip = [item for item in tooltips if a_user_name['id'] in item["ids"]][0]['contents']
+        team.last_sign_in = BeautifulSoup(last_sign_in_tooltip, 'html.parser').find('span', class_='relative-date').text
 
     second_td_horizontal_spacer = row.find_all('td', class_=constants.horizontal_spacer_class)[1]
     td_wins = second_td_horizontal_spacer.next_sibling

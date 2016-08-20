@@ -1,14 +1,15 @@
 import json
 import re
-
 from datetime import datetime
 
 from bs4 import BeautifulSoup
 
 from gwjffl import constants
-
 from gwjffl.classes import gwjffl
 from gwjffl.io.web import get_team_html, get_player_html
+
+tooltips = {}  # global
+transaction_tooltips = {}  # global
 
 
 def get_keeper_prices(keeper_league):
@@ -27,11 +28,14 @@ def get_keeper_prices(keeper_league):
 
 def parse_roster_html(html):
     global tooltips
+
     roster = []
+
     soup = BeautifulSoup(html, 'html.parser')
     page_data = str(soup.find(id='page-data').contents[0])
     json_value = '{%s}' % (page_data.split('{', 1)[1].rsplit('}', 1)[0],)
     tooltips = json.loads(json_value)['tooltips']
+
     rows = soup.find_all('tr', id=constants.row_partial_id)
     for row in rows:
         roster.append(extract_player_info_from_row(row))
@@ -56,7 +60,7 @@ def extract_player_info_from_row(row):
     player.acquired_when_year = int(acquisition_when[-4:])
     player.acquired_when_text = acquisition_when[:-5]
     acquisition = calculate_acquisition(player)
-    player.acquired = acquisition if acquisition else None
+    player.keeper_status = acquisition if acquisition else 'ERROR'
 
     start = player.url.find(constants.player_id_param) + len(constants.player_id_param)
     end = player.url.find('?', start)
@@ -84,8 +88,8 @@ def calculate_acquisition(player):
         acquired_when_week = int(week_maybe) if week_maybe.isnumeric() else 0
         if player.acquired_how == 'Imported':
             acquisition = 'Drafted'
-        elif acquired_when_week > constants.current_week:  # Should only happen in weeks > 13
-            acquisition = 'Cut'
+        elif acquired_when_week > constants.max_keepers_week:
+            acquisition = constants.ineligible_label
         else:
             acquisition = player.acquired_how
     return acquisition
@@ -106,14 +110,15 @@ def add_transaction_data(league):
 
 def parse_transactions_html(html):
     global transaction_tooltips
+
     transactions = []
+
     soup = BeautifulSoup(html, 'html.parser')
     page_data = str(soup.find(id='page-data').contents[0])
     json_value = '{%s}' % (page_data.split('{', 1)[1].rsplit('}', 1)[0],)
     transaction_tooltips = json.loads(json_value)['tooltips']
-    container = soup.find('div', class_=constants.player_inline_class)
 
-    rows = container.find_all('div', class_=constants.list_group_item_text_class)
+    rows = soup.find_all('div', class_=constants.list_group_item_text_class)
     for row in rows:
         transaction = extract_transaction_info_from_row(row)
         if transaction.datetime.year == constants.current_year and transaction.type in ['Added', 'Claimed']:
@@ -130,22 +135,21 @@ def convert_timezone_to_offset(time_str):
 
 
 def extract_transaction_info_from_row(row):
-    # print(row)
+    # Should be strictly focused on getting the information from the HTML. Transformations go elsewhere.
     transaction = gwjffl.Transaction()
 
-    span_date = row.find('span', class_=constants.relative_date_class)
+    transaction.type = row.find('div', class_="player").previous_sibling.strip()
 
+    span_date = row.find('span', class_=constants.relative_date_class)
     transaction_tooltip = [item for item in transaction_tooltips if span_date['id'] in item["ids"]][0]['contents']
     datetime_str = BeautifulSoup(transaction_tooltip, 'html.parser').text
     converted_datetime_str = convert_timezone_to_offset(datetime_str)
-    transaction_when = datetime.strptime(converted_datetime_str, '%a %m/%d/%y %I:%M %p %z')
-    transaction.datetime = transaction_when
-
-    transaction.type = row.find('div', class_="player").previous_sibling.strip()
+    transaction.datetime = datetime.strptime(converted_datetime_str, '%a %m/%d/%y %I:%M %p %z')
 
     r = re.compile('\(\$\d+\)')
     t = row.find(string=r)
     transaction.amount = int(t.strip()[2:-1]) if t else None
+
     return transaction
 
 
@@ -156,7 +160,7 @@ def calculate_player_values(league):
 
         for player in team.roster:
             # print(player.id, player.name, len(player.transactions))
-            if player.acquired_how == 'Cut':
+            if player.keeper_status == constants.ineligible_label:
                 player.peak_price = 999
                 player.last_price = 999
             elif len(player.transactions) > 0:
