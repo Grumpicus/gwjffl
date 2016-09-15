@@ -18,6 +18,8 @@ max_keepers_week = 13
 ineligible_label = 'Ineligible'
 keeper_spreadsheet_id = '1BYucUOA4g661z8izWGXD9Z5gA3n1otdcR_Q1uarBElA'
 keeper_worksheet_id = 'Rosters'
+keeper_max_roster_size = 20  # 10 Starters, 8 Bench, +2 IR
+keeper_spreadsheet_team_rows = keeper_max_roster_size + 1 + 2  # One row for the team name, 2 rows between teams
 
 sub_dir_year_week = '/%d/%d' % (current_year, current_week)
 sub_dir_year = '/%d' % current_year
@@ -43,6 +45,7 @@ keepers_file_path = output_dir + '/keepers.html'
 data_store_dir = '../data_store' + sub_dir_year
 pro_data_storage_path = data_store_dir + '/pro_data.json'
 league_week_storage_path_template = data_store_dir + '/week%d_league%d.json'
+keeper_week_storage_path_template = data_store_dir + '/week%d_keeper.json'
 
 # misc
 standings_label = 'standings'

@@ -70,9 +70,11 @@ def write_keeper(keeper_league):
     keeper_template = env.get_template(constants.keeper_template)
     keeper_output = keeper_template.render(teams=keeper_league.teams)
 
+    print("Writing HTML to %s" % constants.keepers_file_path)
     with open(constants.keepers_file_path, 'w+') as f1:
         f1.write(keeper_output)
 
+    print("Writing keeper to spreadsheet")
     write_keeper_to_spreadsheet(keeper_league)
 
 
@@ -98,35 +100,48 @@ def main():
         print('ERROR: Invalid current week: %d' % constants.current_week)
         return
 
+    print("Initializing")
     init()
 
     leagues = OrderedDict()
     for league_tuple in constants.league_definitions:
+        print("Processing %s league" % league_tuple[1])
         leagues[league_tuple[0]] = League(league_tuple[0], league_tuple[1])
         leagues[league_tuple[0]] = parse_league_html(leagues[league_tuple[0]], constants.current_week)
         pickle_json_to_file(constants.league_week_storage_path_template % (constants.current_week, league_tuple[0]),
                             leagues[league_tuple[0]])
 
+    print("Extracting Pro data")
     pro_league_data = extract_pro_data(leagues[constants.pro_league_id], constants.current_week)
 
     if 0 < constants.current_week < 17:
+        print("Parsing NFL data")
         nfl_week_data = parse_nfl_html(get_nfl_html(constants.current_week))
     else:
         nfl_week_data = {}
 
+    print("Writing weekly output")
     write_output(leagues, constants.current_week, pro_league_data, nfl_week_data)
 
     if constants.current_week > 1:
-        keeper = None
-        for league_id in leagues:
-            if leagues[league_id].name == 'Keeper':
-                keeper = leagues[league_id]
-                break
-        if keeper is None:
-            print('ERROR: Keeper league not found.')
+        keeper_file = constants.keeper_week_storage_path_template % constants.current_week
+        if os.path.exists(keeper_file):
+            print("We already processed keepers for week %d" % constants.current_week)
         else:
-            keeper_league = get_keeper_prices(keeper)
-            write_keeper(keeper_league)
+            keeper = None
+            for league_id in leagues:
+                if leagues[league_id].name == 'Keeper':
+                    keeper = leagues[league_id]
+                    break
+            if keeper is None:
+                print('ERROR: Keeper league not found.')
+            else:
+                print("Processing Keeper data")
+                keeper_league = get_keeper_prices(keeper)
+                print("Writing Keeper data")
+                write_keeper(keeper_league)
+                print("Checkpointing Keeper data")
+                pickle_json_to_file(keeper_file, keeper_league)
 
 
 if __name__ == "__main__":

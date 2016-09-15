@@ -27,6 +27,11 @@ def write_keeper_to_spreadsheet(keeper_league):
     # https://docs.google.com/spreadsheets/d/102Qc780UZqG7cfpgOJ2KuElOe3dnD0DaSa0oaKGEFA0/edit#gid=1643976956
     worksheet = gc.open_by_key(constants.keeper_spreadsheet_id).worksheet(constants.keeper_worksheet_id)
 
+    tweak_cell = worksheet.acell('AD1')
+    print(tweak_cell.value)
+    tweak_cell.value = (180 + (17 * 5)) - (constants.current_week * 5)
+    worksheet.update_cells([tweak_cell])
+
     teams = keeper_league.teams
 
     name_col = get_col_num_from_letter(worksheet, 'A')
@@ -37,14 +42,12 @@ def write_keeper_to_spreadsheet(keeper_league):
     season_avg_col = get_col_num_from_letter(worksheet, 'V')
     player_url_col = get_col_num_from_letter(worksheet, 'AI')
 
-    default_peak_value_template = '=if(' \
-                                  'and(' \
-                                  'A{0}<>"",A{1}<>"",' \
-                                  'C{0}<>"Keeper",C{0}<>"Drafted",C{0}<>"Cut",C{0}<>"Traded For"' \
-                                  '),' \
-                                  '-1,"")'
-
-    team_limit = 23
+    default_final_col_template = '=if(' \
+                                 'and(' \
+                                 'A{0}<>"",A{1}<>"",' \
+                                 'C{0}<>"Keeper",C{0}<>"Drafted",C{0}<>"Cut",C{0}<>"Traded For"' \
+                                 '),' \
+                                 '-1,"")'
 
     row_num = 1
     for team_id in teams:
@@ -55,10 +58,11 @@ def write_keeper_to_spreadsheet(keeper_league):
         print(row_num, team.name)
         worksheet.update_cell(row_num, 1, team.name)
 
-        sorted_roster = sorted(team.roster, key=lambda k: (convert_position_to_sort_index(k.position), k.name))
-        # print(sorted_roster)
+        roster_sorted_by_position = sorted(team.roster,
+                                           key=lambda k: (convert_position_to_sort_index(k.position), k.name))
+        # print(roster_sorted_by_position)
 
-        for player in sorted_roster:
+        for player in roster_sorted_by_position:
             row_num += 1
             team_count += 1
             cell_list = []
@@ -78,13 +82,11 @@ def write_keeper_to_spreadsheet(keeper_league):
                 cell.value = ''
             cell_list.append(cell)
 
-            default_peak_value = default_peak_value_template.format(row_num, row_num - 1)
-
             cell = worksheet.cell(row_num, final_col)
             if player.last_price is not None:
                 cell.value = player.last_price
             else:
-                cell.value = default_peak_value
+                cell.value = default_final_col_template.format(row_num, row_num - 1)
             cell_list.append(cell)
 
             cell = worksheet.cell(row_num, season_total_col)
@@ -102,10 +104,11 @@ def write_keeper_to_spreadsheet(keeper_league):
             print(row_num, player.name, player.keeper_status, player.peak_price, player.last_price, player.url)
             worksheet.update_cells(cell_list)
 
-        while team_count % team_limit > 0:
+        while team_count % constants.keeper_spreadsheet_team_rows > 0:
             row_num += 1
             print(row_num)
             worksheet.update_cell(row_num, name_col, "")
             worksheet.update_cell(row_num, acquired_col, "")
-            worksheet.update_cell(row_num, final_col, default_peak_value_template.format(row_num, row_num - 1))
+            worksheet.update_cell(row_num, peak_col, "")
+            worksheet.update_cell(row_num, final_col, default_final_col_template.format(row_num, row_num - 1))
             team_count += 1

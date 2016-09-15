@@ -15,14 +15,18 @@ transaction_tooltips = {}  # global
 
 def get_keeper_prices(keeper_league):
     # Go to each team page get the roster
+    i = 0
     for team_id in keeper_league.teams:
-        # print(team_id)
+        i += 1
+        print("%d. Getting Keeper prices for team_id: %s" % (i, team_id))
         team = keeper_league.teams[team_id]
         team_html = get_team_html(keeper_league, constants.current_week, team, constants.roster_label)
         roster = parse_roster_html(team_html)
         team.roster = roster
     # TODO: Figure out the optimal time and place to add transaction data
+    print("Adding transaction data")
     keeper_league = add_transaction_data(keeper_league)
+    print("Calculating player values")
     keeper_league = calculate_player_values(keeper_league)
     return keeper_league
 
@@ -101,11 +105,14 @@ def calculate_acquisition(player):
 
 
 def add_transaction_data(league):
+    i = 0
     for team_id in league.teams:
-        # print(team_id)
+        i += 1
+        print("%d. Adding transaction data for team_id: %s" % (i, team_id))
         team = league.teams[team_id]
 
         for player in team.roster:
+            print("%d. Adding transaction data for player: %s" % (i, player.name))
             # print(player.id, player.name)
             player_html = get_player_html(league, constants.current_week, team, player, constants.transactions_label)
             player.transactions = parse_transactions_html(player_html)
@@ -159,12 +166,14 @@ def extract_transaction_info_from_row(row):
 
 
 def calculate_player_values(league):
+    i = 0
     for team_id in league.teams:
-        # print(team_id)
+        i += 1
+        print("%d. Calculating player values for team_id: %s" % (i, team_id))
         team = league.teams[team_id]
 
         for player in team.roster:
-            # print(player.id, player.name, len(player.transactions))
+            print("%d. Calculating value for player: %s (%d transactions)" % (i, player.name, len(player.transactions)))
             if player.keeper_status == constants.ineligible_label:
                 player.peak_price = 999
                 player.last_price = 999

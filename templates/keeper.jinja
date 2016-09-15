@@ -1,10 +1,10 @@
 <table>
 {% for team_id in teams %}
 {% set team = teams[team_id] %}
-<tr><td>&nbsp;</td><td>Draft</td><td>Acquired</td><td>Peak</td><td>Last</td><td>Total FP</td><td>Avg FP</td></tr>
-<tr><td colspan=7>{{ team.name }}</td></tr>
+<tr><td>Name</td><td>Acquired</td><td>Peak</td><td>Final</td><td>Total FP</td><td>Avg FP</td></tr>
+<tr><td colspan=6>{{ team.name }}</td></tr>
 {% for player in team.roster %}
-<tr><td>{{ player.name }}</td><td>$$</td><td>{{ player.keeper_status }}</td><td>{{ player.peak_price }}</td><td>{{ player.last_price }}</td><td>{{ player.season_total }}</td><td>{{ player.season_avg }}</td></tr>
+<tr><td><a href="{{player.url}}">{{ player.name }}</a></td><td>{{ player.keeper_status }}</td><td>{{ player.peak_price }}</td><td>{{ player.last_price }}</td><td>{{ player.season_total }}</td><td>{{ player.season_avg }}</td></tr>
 {% endfor %}
 {% endfor %}
 </table>
