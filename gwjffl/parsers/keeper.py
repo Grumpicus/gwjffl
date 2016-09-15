@@ -8,6 +8,7 @@ from gwjffl import constants
 from gwjffl.classes import gwjffl
 from gwjffl.io.web import get_team_html, get_player_html
 
+
 tooltips = {}  # global
 transaction_tooltips = {}  # global
 
@@ -38,7 +39,9 @@ def parse_roster_html(html):
 
     rows = soup.find_all('tr', id=constants.row_partial_id)
     for row in rows:
-        roster.append(extract_player_info_from_row(row))
+        player_info = extract_player_info_from_row(row)
+        if player_info:
+            roster.append(extract_player_info_from_row(row))
 
     return roster
 
@@ -49,6 +52,8 @@ def extract_player_info_from_row(row):
 
     div_player_name = row.find('div', class_=constants.player_name_class)
     a_player_text = div_player_name.find('a')
+    if not a_player_text:  # blank row; empty roster slot
+        return None
     player.name = a_player_text.text
     player.url = '%s%s' % (constants.fleaflicker_url, a_player_text['href'])
 

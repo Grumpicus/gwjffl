@@ -114,7 +114,9 @@ def main():
     else:
         nfl_week_data = {}
 
-    if constants.current_week == 17:
+    write_output(leagues, constants.current_week, pro_league_data, nfl_week_data)
+
+    if constants.current_week > 1:
         keeper = None
         for league_id in leagues:
             if leagues[league_id].name == 'Keeper':
@@ -125,8 +127,6 @@ def main():
         else:
             keeper_league = get_keeper_prices(keeper)
             write_keeper(keeper_league)
-
-    write_output(leagues, constants.current_week, pro_league_data, nfl_week_data)
 
 
 if __name__ == "__main__":

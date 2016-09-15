@@ -1,8 +1,8 @@
 import re
 from collections import OrderedDict
 
-current_year = 2015
-current_week = 17
+current_year = 2016
+current_week = 2
 
 # leagues # TODO: Convert to OrderedDict?
 league_definitions = [(131597, 'Pro'),
@@ -16,11 +16,15 @@ pro_league_id = 131597
 # keepers
 max_keepers_week = 13
 ineligible_label = 'Ineligible'
+keeper_spreadsheet_id = '1BYucUOA4g661z8izWGXD9Z5gA3n1otdcR_Q1uarBElA'
+keeper_worksheet_id = 'Rosters'
 
-sub_dir = '/%d/%d' % (current_year, current_week)
+sub_dir_year_week = '/%d/%d' % (current_year, current_week)
+sub_dir_year = '/%d' % current_year
+
 
 # edible_pickle
-edible_pickle_dir = '../pickles' + sub_dir
+edible_pickle_dir = '../pickles' + sub_dir_year_week
 edible_pickle_template = 'week{2}_{1}_{3}.html'
 
 # templates
@@ -30,10 +34,15 @@ week_end_scores_template = 'week_end_scores.template'
 keeper_template = 'keeper.jinja'
 
 # output
-output_dir = '../output' + sub_dir
+output_dir = '../output' + sub_dir_year_week
 start_week_file_path = output_dir + '/start_week%d.html'
 end_week_file_path = output_dir + '/end_week%d.html'
 keepers_file_path = output_dir + '/keepers.html'
+
+# data_store
+data_store_dir = '../data_store' + sub_dir_year
+pro_data_storage_path = data_store_dir + '/pro_data.json'
+league_week_storage_path_template = data_store_dir + '/week%d_league%d.json'
 
 # misc
 standings_label = 'standings'
@@ -45,12 +54,7 @@ consolation_label = 'consolation'
 roster_label = 'roster'
 transactions_label = 'transactions'
 
-# data_store
-data_store_dir = '../data_store'
-pro_data_storage_path = data_store_dir + '/pro_data.json'
-league_week_storage_path_template = data_store_dir + '/week%d_league%d.json'
-
-#fleaflicker
+# fleaflicker
 fleaflicker_url = 'http://www.fleaflicker.com'
 standings_url_template = 'http://www.fleaflicker.com/nfl/leagues/%s?season=%s'
 schedule_url_template = 'http://www.fleaflicker.com/nfl/leagues/%s/scores?week=%s&season=%s'
