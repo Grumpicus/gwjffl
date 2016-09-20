@@ -26,6 +26,10 @@
 {% if leagues[league_id].schedule %}
 {% include 'schedule.template' %}
 {% endif %}
+
+{% if league_id == 92221 and current_week > 1 %}
+{% include 'keeper.template' %}
+{% endif %}
 </fieldset>
 
 <p>&nbsp;</p>

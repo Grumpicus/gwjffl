@@ -1,3 +1,5 @@
+from collections import OrderedDict
+
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 
@@ -49,8 +51,10 @@ def write_keeper_to_spreadsheet(keeper_league):
                                  '),' \
                                  '-1,"")'
 
+    alphabetical_teams = OrderedDict(sorted(teams.items(), key=lambda t: t[1].name))
+
     row_num = 1
-    for team_id in teams:
+    for team_id in alphabetical_teams:
         team = teams[team_id]
         row_num += 1
         team_count = 1
