@@ -2,7 +2,7 @@ import re
 from collections import OrderedDict
 
 current_year = 2016
-current_week = 3
+current_week = 7
 
 # leagues # TODO: Convert to OrderedDict?
 league_definitions = [(131597, 'Pro'),

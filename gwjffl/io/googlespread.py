@@ -62,11 +62,10 @@ def write_keeper_to_spreadsheet(keeper_league):
         print(row_num, team.name)
         worksheet.update_cell(row_num, 1, team.name)
 
-        roster_sorted_by_position = sorted(team.roster,
-                                           key=lambda k: (convert_position_to_sort_index(k.position), k.name))
-        # print(roster_sorted_by_position)
+        # roster_sorted_by_position = sorted(team.roster, key=lambda k: (convert_position_to_sort_index(k.position), k.name))
+        roster_sorted_by_name = sorted(team.roster, key=lambda k: k.name)
 
-        for player in roster_sorted_by_position:
+        for player in roster_sorted_by_name:
             row_num += 1
             team_count += 1
             cell_list = []
