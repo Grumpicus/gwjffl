@@ -63,7 +63,7 @@ def extract_team_info_from_row(row):
         a_user_name = row.find('a', string="Take Over")
     team.username = a_user_name.text if a_user_name else 'ERROR'
     team.inactive = constants.inactive_class in a_user_name['class']
-    if 'id' in a_user_name:
+    if 'id' in a_user_name.attrs:
         last_sign_in_tooltip = [item for item in tooltips if a_user_name['id'] in item["ids"]][0]['contents']
         team.last_sign_in = BeautifulSoup(last_sign_in_tooltip, 'html.parser').find('span', class_='relative-date').text
 

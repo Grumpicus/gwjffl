@@ -15,7 +15,7 @@
 {%- endif -%}
 {% if team.rank > 0 %}#{{ team.rank }}{% endif %}</td>
 <td style="width:16px; text-align:center;">{{ team.icon }}</td>
-<td style="text-align:left;"><a href="{{ team.url }}">{{ team.name }}</a> (<span title="Last Sign In {{ team.last_sign_in }}{% if team.inactive %} (inactive){% endif %}">{{ team.username }}{% if current_week <= 16 and team.inactive %} <i class="fa fa-flag" style="color:DarkRed; cursor:help; border-bottom:1px dashed;" title="WARNING: Inactive managers risk being prohibited from participating next season."></i>{% endif %}</span>) {% if current_week < 14 %}{{ team.html_notes }}{% endif %} {% if team.trophy %}<i class="fa fa-trophy" title="League Champ!" style="color:GoldenRod; cursor:help;"></i>{% endif %}
+<td style="text-align:left;"><a href="{{ team.url }}">{{ team.name }}</a> (<span title="Last Sign In {{ team.last_sign_in }}{% if team.inactive %} (inactive){% endif %}">{% if current_week > 16 and ('month' in team.last_sign_in) %}<em>{% endif %}{{ team.username }}{% if current_week > 16 and ('month' in team.last_sign_in) %}</em>{% endif %}{% if current_week <= 16 and team.inactive %} <i class="fa fa-flag" style="color:DarkRed; cursor:help; border-bottom:1px dashed;" title="WARNING: Inactive managers risk being prohibited from participating next season."></i>{% endif %}</span>) {% if current_week < 14 %}{{ team.html_notes }}{% endif %} {% if team.trophy %}<i class="fa fa-trophy" title="League Champ!" style="color:GoldenRod; cursor:help;"></i>{% endif %}
 </td>
 <td>{{ team.wins }}-{{ team.losses }}</td>
 <td>{{ team.div_record }} ({% if team.div_rank == 1 %}<b>{% endif %}#{{ team.div_rank }}{% if team.div_rank == 1 %}</b>{% endif %})</td>

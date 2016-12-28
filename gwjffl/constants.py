@@ -2,7 +2,7 @@ import re
 from collections import OrderedDict
 
 current_year = 2016
-current_week = 7
+current_week = 17
 
 # leagues # TODO: Convert to OrderedDict?
 league_definitions = [(131597, 'Pro'),
@@ -124,7 +124,7 @@ scoreboard_ids = {
 }
 
 team_notes_style_default = 'font-size:8pt; cursor:help; border-bottom:1px dashed;'
-#OrderedDict for printing in main.template
+# OrderedDict for printing in main.template
 team_notes = OrderedDict((x[0], x[1]) for x in [
     ((text_success_style, '*'), 'Would make playoffs if season ended now'),
     ((text_success_style, 'y'), 'Clinched division'),
