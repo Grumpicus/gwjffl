@@ -11,7 +11,6 @@ from gwjffl.io.googlespread import write_keeper_to_spreadsheet
 from gwjffl.io.jsonstore import pickle_json_to_file, unpickle_json_from_file
 from gwjffl.io.web import get_html, get_league_html
 from gwjffl.parsers.gwjffl import extract_pro_data, parse_standings, parse_schedule, parse_scores
-from gwjffl.parsers.keeper import get_keeper_prices
 from gwjffl.parsers.nfl import parse_nfl_html
 
 
@@ -123,25 +122,25 @@ def main():
     print("Writing weekly output")
     write_output(leagues, constants.current_week, pro_league_data, nfl_week_data)
 
-    if constants.current_week > 1:
-        keeper_file = constants.keeper_week_storage_path_template % constants.current_week
-        if os.path.exists(keeper_file):
-            print("We already processed keepers for week %d" % constants.current_week)
-        else:
-            keeper = None
-            for league_id in leagues:
-                if leagues[league_id].name == 'Keeper':
-                    keeper = leagues[league_id]
-                    break
-            if keeper is None:
-                print('ERROR: Keeper league not found.')
-            else:
-                print("Processing Keeper data")
-                keeper_league = get_keeper_prices(keeper)
-                print("Writing Keeper data")
-                write_keeper(keeper_league)
-                print("Checkpointing Keeper data")
-                pickle_json_to_file(keeper_file, keeper_league)
+    # if constants.current_week > 1:
+    #     keeper_file = constants.keeper_week_storage_path_template % constants.current_week
+    #     if os.path.exists(keeper_file):
+    #         print("We already processed keepers for week %d" % constants.current_week)
+    #     else:
+    #         keeper = None
+    #         for league_id in leagues:
+    #             if leagues[league_id].name == 'Keeper':
+    #                 keeper = leagues[league_id]
+    #                 break
+    #         if keeper is None:
+    #             print('ERROR: Keeper league not found.')
+    #         else:
+    #             print("Processing Keeper data")
+    #             keeper_league = get_keeper_prices(keeper)
+    #             print("Writing Keeper data")
+    #             write_keeper(keeper_league)
+    #             print("Checkpointing Keeper data")
+    #             pickle_json_to_file(keeper_file, keeper_league)
 
 
 if __name__ == "__main__":

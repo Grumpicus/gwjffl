@@ -1,14 +1,14 @@
 import re
 from collections import OrderedDict
 
-current_year = 2016
-current_week = 17
+current_year = 2017
+current_week = 1
 
 # leagues # TODO: Convert to OrderedDict?
 league_definitions = [(131597, 'Pro'),
                       (34260, 'Division I'),
-                      (33978, 'Division II'),
-                      (92221, 'Keeper'),
+                      # (33978, 'Division II'),
+                      # (92221, 'Keeper'),
                       (120356, 'Dynasty')]
 
 pro_league_id = 131597
