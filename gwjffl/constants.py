@@ -2,7 +2,7 @@ import re
 from collections import OrderedDict
 
 current_year = 2017
-current_week = 1
+current_week = 11
 
 # leagues # TODO: Convert to OrderedDict?
 league_definitions = [(131597, 'Pro'),
@@ -59,7 +59,8 @@ transactions_label = 'transactions'
 
 # fleaflicker
 fleaflicker_url = 'http://www.fleaflicker.com'
-standings_url_template = 'http://www.fleaflicker.com/nfl/leagues/%s?season=%s'
+# standings_url_template = 'http://www.fleaflicker.com/nfl/leagues/%s?season=%s'
+standings_url_template = 'http://www.fleaflicker.com/nfl/leagues/%s?tableSortDirection=ASC&tableSortName=14&season=%s'
 schedule_url_template = 'http://www.fleaflicker.com/nfl/leagues/%s/scores?week=%s&season=%s'
 # playoffs_bracket_url_template = 'http://www.fleaflicker.com/nfl/leagues/%s/playoffs'
 consolation_bracket_url_template = 'http://www.fleaflicker.com/nfl/leagues/%s/playoffs?bracketIndex=1&season=%s'

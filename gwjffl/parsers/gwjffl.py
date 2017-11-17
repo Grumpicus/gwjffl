@@ -16,7 +16,8 @@ def parse_standings(html):
     page_data = str(soup.find(id='page-data').contents[0])
     json_value = '{%s}' % (page_data.split('{', 1)[1].rsplit('}', 1)[0],)
     tooltips = json.loads(json_value)['tooltips']
-    rows = soup.find_all('tr', id=constants.row_partial_id)
+    # rows = soup.find_all('tr', id=constants.row_partial_id)
+    rows = soup.find('thead').find_next_siblings('tr')
     for row in rows:
         teams.append(extract_team_info_from_row(row))
 
