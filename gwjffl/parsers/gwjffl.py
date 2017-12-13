@@ -119,9 +119,27 @@ def parse_scores(html):
 
 
 def get_game_info(game_number, soup):
-    team1_row = soup.find(id=constants.scoreboard_ids['game%d_team1_id' % game_number])
-    team2_row = soup.find(id=constants.scoreboard_ids['game%d_team2_id' % game_number])
-    game_link_row = soup.find(id=constants.scoreboard_ids['game%d_box_link_id' % game_number])
+    # team1_row = soup.find(id=constants.scoreboard_ids['game%d_team1_id' % game_number])
+    # team2_row = soup.find(id=constants.scoreboard_ids['game%d_team2_id' % game_number])
+    # game_link_row = soup.find(id=constants.scoreboard_ids['game%d_box_link_id' % game_number])
+
+    # terrible hack in week 15 of 2017 because Fleaflicker broke the lines above
+    scoreboard = soup.find_all("tr", class_="scoreboard")
+    # Game 1:  0 vs.  1
+    # Game 2:  2 vs.  3
+    # Game 3:  4 vs.  5
+    # Game 4:  6 vs.  7
+    # Game 5:  8 vs.  9
+    # Game 6: 10 vs. 11
+    t1 = (game_number * 2) - 2
+    t2 = t1 + 1
+    if t2 > len(scoreboard):
+        return None
+    # else:
+    team1_row = scoreboard[t1]
+    team2_row = scoreboard[t2]
+    game_link_row = soup.find_all("tr", class_="last small")[game_number - 1]
+
     if team1_row and team2_row and game_link_row:
         return gwjffl.Game(get_result(team1_row), get_result(team2_row), get_game_link(game_link_row))
     else:
