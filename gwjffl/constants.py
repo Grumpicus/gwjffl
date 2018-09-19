@@ -1,12 +1,13 @@
-import re
 from collections import OrderedDict
 
-current_year = 2017
-current_week = 15
+import re
+
+current_year = 2018
+current_week = 3
 
 # leagues # TODO: Convert to OrderedDict?
-league_definitions = [(131597, 'Pro'),
-                      (34260, 'Division I'),
+league_definitions = [(131597, 'The Chase for the Kolb'),
+                      # (34260, 'Division I'),
                       # (33978, 'Division II'),
                       # (92221, 'Keeper'),
                       (120356, 'Dynasty')]
@@ -16,7 +17,7 @@ pro_league_id = 131597
 # keepers
 max_keepers_week = 13
 ineligible_label = 'Ineligible'
-keeper_spreadsheet_id = '1BYucUOA4g661z8izWGXD9Z5gA3n1otdcR_Q1uarBElA'
+keeper_spreadsheet_id = '1a54F6P4KsRlY0fBp9fNW4xtb9KGxbiTtdw41tSMOGFQ'
 keeper_worksheet_id = 'Rosters'
 keeper_max_roster_size = 20  # 10 Starters, 8 Bench, +2 IR
 keeper_spreadsheet_team_rows = keeper_max_roster_size + 1 + 2  # One row for the team name, 2 rows between teams

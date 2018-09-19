@@ -10,3 +10,4 @@
 <div style="clear:both;">
 <div style="text-align:right;">Source: {{ nfl_data.source }}</div>
 </div>
+<div style="clear:both;">&nbsp;</div>

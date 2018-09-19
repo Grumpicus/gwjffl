@@ -1,8 +1,8 @@
 # python_version: 3.4.3
 
-import os
 from collections import OrderedDict
 
+import os
 from jinja2 import Environment, FileSystemLoader
 
 from gwjffl import constants
@@ -122,6 +122,7 @@ def main():
     print("Writing weekly output")
     write_output(leagues, constants.current_week, pro_league_data, nfl_week_data)
 
+    # Keeper league stuff. No keeper league so commented out.
     # if constants.current_week > 1:
     #     keeper_file = constants.keeper_week_storage_path_template % constants.current_week
     #     if os.path.exists(keeper_file):
