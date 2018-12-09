@@ -1,13 +1,11 @@
 import json
 import re
-from datetime import datetime
-
 from bs4 import BeautifulSoup
+from datetime import datetime
 
 from gwjffl import constants
 from gwjffl.classes import gwjffl
-from gwjffl.io.web import get_team_html, get_player_html
-
+from gwjffl.inputoutput.web import get_team_html, get_player_html
 
 tooltips = {}  # global
 transaction_tooltips = {}  # global

@@ -1,12 +1,12 @@
-import json
 from collections import OrderedDict
 
+import json
 from bs4 import BeautifulSoup
 
 from gwjffl import constants
 from gwjffl.classes import gwjffl
-from gwjffl.io.jsonstore import pickle_json_to_file, unpickle_json_from_file
-from gwjffl.io.web import get_league_html
+from gwjffl.inputoutput.jsonstore import pickle_json_to_file, unpickle_json_from_file
+from gwjffl.inputoutput.web import get_league_html
 
 
 def parse_standings(html):
@@ -47,6 +47,7 @@ def extract_team_info_from_row(row):
     td_div_rank = row.contents[0]
     team.div_rank = int(td_div_rank.text)
 
+    # Start "Fantasy"
     div_league_name = row.find('div', class_=constants.league_name_class)
     team.icon = '' if div_league_name.find('img') is None else '<img src="%s">' % div_league_name.find('img')['src']
     a_team_info = div_league_name.find('a')
@@ -67,26 +68,39 @@ def extract_team_info_from_row(row):
     if 'id' in a_user_name.attrs:
         last_sign_in_tooltip = [item for item in tooltips if a_user_name['id'] in item["ids"]][0]['contents']
         team.last_sign_in = BeautifulSoup(last_sign_in_tooltip, 'html.parser').find('span', class_='relative-date').text
+    # End "Fantasy"
 
+    # Start "Standings"
+    has_ties = len(row.contents) == 24  # FRAGILE
     second_td_horizontal_spacer = row.find_all('td', class_=constants.horizontal_spacer_class)[1]
     td_wins = second_td_horizontal_spacer.next_sibling
     team.wins = int(td_wins.text if td_wins.text != "" else 0)
     td_losses = td_wins.next_sibling
     team.losses = int(td_losses.text if td_losses.text != "" else 0)
+    if has_ties:
+        td_ties = td_losses.next_sibling
+        team.ties = int(td_ties.text if td_ties.text != "" else 0)
+        td_losses = td_losses.next_sibling
     td_div_record = td_losses.next_sibling.next_sibling.next_sibling
     team.div_record = td_div_record.text
 
     third_td_horizontal_spacer = row.find_all('td', class_=constants.horizontal_spacer_class)[2]
     td_streak = third_td_horizontal_spacer.previous_sibling
     team.streak = td_streak.text
+    # End "Standings"
+
+    # Start "Stats"
     td_points_for = third_td_horizontal_spacer.next_sibling
     team.points_for = float(td_points_for.text.replace(',', '') if td_points_for.text != "" else 0)
     td_points_against = td_points_for.next_sibling.next_sibling
     team.points_against = float(td_points_against.text.replace(',', '') if td_points_against.text != "" else 0)
+    # End "Stats"
 
+    # Start "Misc"
     fourth_td_horizontal_spacer = row.find_all('td', class_=constants.horizontal_spacer_class)[3]
     td_rank = fourth_td_horizontal_spacer.next_sibling
     team.rank = int(td_rank.text if td_rank.text != "" else 0)
+    # End "Misc"
 
     return team
 

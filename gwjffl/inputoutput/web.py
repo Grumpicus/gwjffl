@@ -1,8 +1,7 @@
 import re
+from ediblepickle import checkpoint
 from string import Template
 from urllib.request import urlopen
-
-from ediblepickle import checkpoint
 
 from gwjffl import constants
 

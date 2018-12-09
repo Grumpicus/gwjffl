@@ -3,7 +3,7 @@ from collections import OrderedDict
 import re
 
 current_year = 2018
-current_week = 4
+current_week = 14
 
 # leagues # TODO: Convert to OrderedDict?
 league_definitions = [(131597, 'The Chase for the Kolb'),
@@ -148,3 +148,7 @@ nfl_schedules_list_date_div_class = 'schedules-list-date'
 nfl_schedules_centerpiece_div_id = 'schedules-centerpiece'
 nfl_schedules_table_ul_class = 'schedules-table'
 nfl_schedules_list_matchup_li_class = 'schedules-list-matchup'
+nfl_list_matchup_row_time_div_class = 'list-matchup-row-time'
+nfl_list_matchup_row_team_div_class = 'list-matchup-row-team'
+nfl_list_matchup_row_tv_div_class = 'list-matchup-row-tv'
+nfl_tv_icon_span_class = 'nflicon'

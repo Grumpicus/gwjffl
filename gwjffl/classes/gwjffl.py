@@ -18,6 +18,7 @@ class Team(object):
         self.username = ''
         self.wins = 0
         self.losses = 0
+        self.ties = 0
         self.points_for = 0
         self.points_against = 0
         self.streak = ''

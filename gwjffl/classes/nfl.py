@@ -4,12 +4,15 @@ class Week(object):
         self.byes = ''
         self.dates = ''
         self.gotw = {}
-        self.matchups = []
+        self.early = []
+        self.later = []
         self.first_date = ''
         self.source = ''
 
 
 class Matchup(object):
     def __init__(self):
-        self.time = None
+        self.date = ''
+        self.time = ''
         self.teams = ''
+        self.tv = ''

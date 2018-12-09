@@ -6,10 +6,11 @@ import os
 from jinja2 import Environment, FileSystemLoader
 
 from gwjffl import constants
+from gwjffl.classes import nfl
 from gwjffl.classes.gwjffl import League
-from gwjffl.io.googlespread import write_keeper_to_spreadsheet
-from gwjffl.io.jsonstore import pickle_json_to_file, unpickle_json_from_file
-from gwjffl.io.web import get_html, get_league_html
+from gwjffl.inputoutput.googlespread import write_keeper_to_spreadsheet
+from gwjffl.inputoutput.jsonstore import pickle_json_to_file, unpickle_json_from_file
+from gwjffl.inputoutput.web import get_html, get_league_html
 from gwjffl.parsers.gwjffl import extract_pro_data, parse_standings, parse_schedule, parse_scores
 from gwjffl.parsers.nfl import parse_nfl_html
 
@@ -113,11 +114,12 @@ def main():
     print("Extracting Pro data")
     pro_league_data = extract_pro_data(leagues[constants.pro_league_id], constants.current_week)
 
-    if 0 < constants.current_week < 17:
+    if (0 < constants.current_week < 17):  # and (0 < datetime.datetime.today().weekday() < 4):
         print("Parsing NFL data")
         nfl_week_data = parse_nfl_html(get_nfl_html(constants.current_week))
     else:
-        nfl_week_data = {}
+        nfl_week_data = nfl.Week(constants.current_week)
+        nfl_week_data.source = constants.nfl_schedule_url_template % (constants.current_year, constants.current_week)
 
     print("Writing weekly output")
     write_output(leagues, constants.current_week, pro_league_data, nfl_week_data)

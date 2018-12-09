@@ -1,13 +1,26 @@
 <div style="float:left;">
-<strong>Early games:</strong>
-<ul>
-{% for m in nfl_data.matchups %}
-<li>{{ nfl_data.first_date }}, {{ m.time }}: {{ m.teams }}</li>
-{% endfor %}
-</ul>
-<strong>Byes:</strong> {{ nfl_data.byes }}
+{% if nfl_data.byes %}
+    <strong>Bye:</strong> {{ nfl_data.byes }}
+    <strong>Early games:</strong>
+    <ul>
+    {% for m in nfl_data.early %}
+    <li>{{ m.date }}, {{ m.time }}{% if m.tv %} ({{ m.tv }}){% endif %}: {{ m.teams }}</li>
+    {% endfor %}
+    </ul>
+
+    <div class="quote spoiler">
+    <div class="quote-username">Later games <span onclick="jQuery(this).parentsUntil('.quote.spoiler').parent().toggleClass('spoiler-shown').find('.spoiler').toggleClass('spoiler-shown');" class="spoiler-toggle"><span class="spoiler-show">(show)</span><span class="spoiler-hide">(hide)</span></span>:</div>
+    <blockquote style="padding-left: 40px;">
+    {% for m in nfl_data.later %}
+    <li>{{ m.date }}, {{ m.time }} ({{ m.tv }}): {{ m.teams }}</li>
+    {% endfor %}
+    </blockquote>
+    </div>
+{% else %}
+    <strong>No data</strong>
+{% endif %}
 </div>
 <div style="clear:both;">
-<div style="text-align:right;">Source: {{ nfl_data.source }}</div>
+    <div style="text-align:right;">Source: {{ nfl_data.source }}</div>
 </div>
 <div style="clear:both;">&nbsp;</div>

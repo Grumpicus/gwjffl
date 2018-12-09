@@ -5,7 +5,6 @@ from oauth2client.service_account import ServiceAccountCredentials
 
 from gwjffl import constants
 
-
 SCOPE = ['https://spreadsheets.google.com/feeds']
 CLIENT_SECRET_FILE = '../config/gwjffl-secret.json'
 
